@@ -13,16 +13,13 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
-import main.ReservationSub.command.ReservationSubSystemOperations;
-import main.Shared.WindowNavigation;
-import main.dbsub.DBFacade;
+import main.dbsub.DBFacadeImpl;
 import main.dbsub.DBService;
 import main.model.*;
 import main.model.Guest;
 
 import javax.swing.*;
 import java.net.URL;
-import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -36,27 +33,27 @@ public class GuestTapController implements Initializable {
     private javafx.scene.control.TableView tblVWGuest;
 
     @FXML
-    private TableColumn<Guest, String> code;
+    private TableColumn<FRCustomerModel, String> code;
     @FXML
-    private TableColumn<Guest, String> firstName;
+    private TableColumn<FRCustomerModel, String> firstName;
     @FXML
-    private TableColumn<Guest, String> middleName;
+    private TableColumn<FRCustomerModel, String> middleName;
     @FXML
-    private TableColumn<Guest, String> lastName;
+    private TableColumn<FRCustomerModel, String> lastName;
     @FXML
-    private TableColumn<Guest, String> idCard;
+    private TableColumn<FRCustomerModel, String> idCard;
     @FXML
-    private TableColumn<Guest, String> pasport;
+    private TableColumn<FRCustomerModel, String> pasport;
     @FXML
-    private TableColumn<Guest, String> phone;
+    private TableColumn<FRCustomerModel, String> phone;
     @FXML
     private TextField txtGuestSearch;
 
-    List<Guest> guestList = null;
+    List<FRCustomerModel> guestList = null;
     private DBService dbService;
 
     public GuestTapController() {
-        this.dbService = new DBFacade();
+        this.dbService = new DBFacadeImpl();
     }
 
     public void onTxtGuestSearch() {
@@ -69,9 +66,9 @@ public class GuestTapController implements Initializable {
 
     public void onBtnGuestAddClicked() {
         try {
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("../../resource/view/Guest.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("../../resource/view/FRCustomerModel.fxml"));
             Parent root1 = (Parent) fxmlLoader.load();
-            main.controller.Guest guCtrl = fxmlLoader.<main.controller.Guest>getController();
+            main.controller.Guest guCtrl = (main.controller.Guest) fxmlLoader.<FRCustomerModel>getController();
             Stage stage = new Stage();
             stage.setScene(new Scene(root1));
             guCtrl.setStage(stage);
@@ -89,10 +86,10 @@ public class GuestTapController implements Initializable {
 
 
         try {
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("../../resource/view/Guest.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("../../resource/view/FRCustomerModel.fxml"));
             Parent root1 = (Parent) fxmlLoader.load();
             Stage stage = new Stage();
-            main.controller.Guest guCtrl = fxmlLoader.<main.controller.Guest>getController();
+            main.controller.Guest guCtrl = (main.controller.Guest) fxmlLoader.<FRCustomerModel>getController();
             guCtrl.setEditedGuest((Guest) tblVWGuest.getSelectionModel().getSelectedItem());
             guCtrl.setEditWindow(true);
             stage.setScene(new Scene(root1));
@@ -127,7 +124,7 @@ public class GuestTapController implements Initializable {
         pasport.setCellValueFactory(new PropertyValueFactory<>("passport"));
         phone.setCellValueFactory(new PropertyValueFactory<>("phone"));
 
-        TableColumn<Guest, Number> indexColumn = new TableColumn<Guest, Number>("No.");
+        TableColumn<FRCustomerModel, Number> indexColumn = new TableColumn<FRCustomerModel, Number>("No.");
         indexColumn.setSortable(false);
         indexColumn.setCellValueFactory(column-> new ReadOnlyObjectWrapper<Number>(tblVWGuest.getItems().indexOf(column.getValue())));
 
@@ -140,8 +137,8 @@ public class GuestTapController implements Initializable {
     public void refreshHomeTableView() {
 
         // 1. Wrap the ObservableList in a FilteredList (initially display all data).
-        ObservableList<Guest> masterData = (ObservableList<Guest>) parseReservationList();
-        FilteredList<Guest> filteredData = new FilteredList<>(masterData, p -> true);
+        ObservableList<FRCustomerModel> masterData = (ObservableList<FRCustomerModel>) parseReservationList();
+        FilteredList<FRCustomerModel> filteredData = new FilteredList<>(masterData, p -> true);
 
         // 2. Set the filter Predicate whenever the filter changes.
         txtGuestSearch.textProperty().addListener((observable, oldValue, newValue) -> {
@@ -167,7 +164,7 @@ public class GuestTapController implements Initializable {
         });
 
         // 3. Wrap the FilteredList in a SortedList.
-        SortedList<Guest> sortedData = new SortedList<>(filteredData);
+        SortedList<FRCustomerModel> sortedData = new SortedList<>(filteredData);
 
         // 4. Bind the SortedList comparator to the TableView comparator.
         sortedData.comparatorProperty().bind(tblVWGuest.comparatorProperty());
@@ -175,12 +172,12 @@ public class GuestTapController implements Initializable {
         tblVWGuest.setItems(sortedData);
     }
 
-    private List<Guest> parseReservationList() {
+    private List<FRCustomerModel> parseReservationList() {
 
         guestList = this.dbService.getAllGuest();
-        List<Guest> modifiedList = new ArrayList<>();
+        List<FRCustomerModel> modifiedList = new ArrayList<>();
 
-        for (Guest gu : guestList) {
+        for (FRCustomerModel gu : guestList) {
 
             int code = gu.getCode();
             String fName = gu.getfName();
@@ -189,16 +186,16 @@ public class GuestTapController implements Initializable {
             String iDcard = gu.getIdCard();
             String pass = gu.getPassport();
             String phone = gu.getPhone();
-            Guest guest = new Guest(code, fName, mName, lName, iDcard, pass, gu.getAddress(), phone);
+            FRCustomerModel guest = new Guest(code, fName, mName, lName, iDcard, pass, gu.getAddress(), phone);
             modifiedList.add(guest);
         }
-        final ObservableList<Guest> list = FXCollections.observableArrayList();
+        final ObservableList<FRCustomerModel> list = FXCollections.observableArrayList();
         list.addAll(modifiedList);
         return list;
     }
 
     public void deleteGuest() {
-        Guest guest = (Guest) tblVWGuest.getSelectionModel().getSelectedItem();
+        FRCustomerModel guest = (FRCustomerModel) tblVWGuest.getSelectionModel().getSelectedItem();
         if (guest != null) {
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setTitle("Delete Confirmation");

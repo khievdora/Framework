@@ -1,6 +1,6 @@
 package main.dbsub;
 
-import main.model.RoomType;
+import main.model.FRProductTypeModel;
 
 import java.util.List;
 
@@ -9,12 +9,12 @@ import java.util.List;
  */
 public interface IRoomType {
 
-    public int saveRoomType(RoomType roomType);
-    public int updateRoomType(RoomType roomType);
-    public int deleteRoomType(RoomType roomType);
+    public int saveRoomType(FRProductTypeModel roomType);
+    public int updateRoomType(FRProductTypeModel roomType);
+    public int deleteRoomType(FRProductTypeModel roomType);
     public int deleteRoomTypeById(int roomTypeId);
-    public RoomType getRoomTypeById(int roomTypeId);
-    public List<RoomType> getAllRoomType();
+    public FRProductTypeModel getRoomTypeById(int roomTypeId);
+    public List<FRProductTypeModel> getAllRoomType();
 
 
 }

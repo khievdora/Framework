@@ -19,7 +19,7 @@ import main.LoginWindow;
 import main.authenticationsub.AuthenticationService;
 import main.authenticationsub.AuthenticationSubcriber;
 import main.authenticationsub.AuthenticatoinFacade;
-import main.model.Account;
+import main.model.FRAccountModel;
 
 import java.io.InputStream;
 import java.net.URL;
@@ -80,7 +80,7 @@ public class LoginController implements Initializable, AuthenticationSubcriber {
     }
 
     @Override
-    public void onLoginSuccess(Account account) {
+    public void onLoginSuccess(FRAccountModel account) {
         // Navigate to Welcome screen
         System.out.println("Login success!!!");
         this.loginWindow.navigateToMainWindow();

@@ -1,5 +1,6 @@
 package main.dbsub;
 
+import main.model.FRProductModel;
 import main.model.Room;
 
 import java.sql.ResultSet;
@@ -18,7 +19,7 @@ public class RoomImpl implements IRoom {
     }
 
     @Override
-    public int saveRoom(Room room) {
+    public int saveRoom(FRProductModel room) {
         int roomId = 0;
         try {
             String sql = "INSERT INTO room (roomName, roomNumber, roomStatus, floor, description, idRoomType, maxGuest, " +
@@ -46,7 +47,7 @@ public class RoomImpl implements IRoom {
     }
 
     @Override
-    public int updateRoom(Room room) {
+    public int updateRoom(FRProductModel room) {
         int result = 0;
         try {
             String sql = "UPDATE room SET " +
@@ -70,7 +71,7 @@ public class RoomImpl implements IRoom {
     }
 
     @Override
-    public int deleteRoom(Room room) {
+    public int deleteRoom(FRProductModel room) {
         int result = 0;
         try {
             String sql = "DELETE FROM room WHERE idRoom = " + room.getCode();
@@ -98,7 +99,7 @@ public class RoomImpl implements IRoom {
     }
 
     @Override
-    public Room getRoomById(int roomId) {
+    public FRProductModel getRoomById(int roomId) {
         Room room = null;
         try {
             String sql = "SELECT * FROM room WHERE idRoom = " + roomId + " LIMIT 1";
@@ -126,8 +127,8 @@ public class RoomImpl implements IRoom {
     }
 
     @Override
-    public List<Room> getAllRoom() {
-        List<Room> roomList = new ArrayList<>();
+    public List<FRProductModel> getAllRoom() {
+        List<FRProductModel> roomList = new ArrayList<>();
         try {
             String sql = "SELECT * FROM room";
             ResultSet rs = this.iDatabase.executeQuery(sql);

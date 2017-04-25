@@ -3,6 +3,7 @@ package test;
 import main.accountsub.AccountFacade;
 import main.accountsub.AccountService;
 import main.model.Account;
+import main.model.FRAccountModel;
 import main.statusenums.AccountStatus;
 import main.statusenums.Status;
 import main.statusenums.UserRole;
@@ -21,11 +22,11 @@ public class AccountMainTest {
         AccountService accountService = new AccountFacade();
 
         // List all account in the db
-        List<Account> accountList = accountService.getAllAccount();
+        List<FRAccountModel> accountList = accountService.getAllAccount();
         mainTest.displayAllAccount(accountList);
 
         // Add new account
-        Account account = new Account();
+        FRAccountModel account = new Account();
         account.setCode(accountList.size() + 1);
         account.setUserName("dora");
         account.setPassword("dora");
@@ -39,7 +40,7 @@ public class AccountMainTest {
         //mainTest.displayAllAccount(accountList);
 
         // Edit account
-        Account doraAccount = accountService.getAccountByUserId("4");
+        FRAccountModel doraAccount = accountService.getAccountByUserId("4");
 //        doraAccount.setAccountStatus(AccountStatus.SUSPENDED.toString());
 //        accountService.updateAccount(doraAccount);
 //        System.out.println("After update");
@@ -59,9 +60,9 @@ public class AccountMainTest {
     public void addAccount(){
 
     }
-    public void displayAllAccount(List<Account> accountList) {
-        printTitle("Account List");
-        for (Account item : accountList) {
+    public void displayAllAccount(List<FRAccountModel> accountList) {
+        printTitle("FRAccountModel List");
+        for (FRAccountModel item : accountList) {
             System.out.println(item.toString());
         }
     }

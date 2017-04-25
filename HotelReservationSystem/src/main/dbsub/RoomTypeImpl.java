@@ -1,5 +1,6 @@
 package main.dbsub;
 
+import main.model.FRProductTypeModel;
 import main.model.RoomType;
 
 import java.sql.ResultSet;
@@ -18,7 +19,7 @@ public class RoomTypeImpl implements IRoomType {
     }
 
     @Override
-    public int saveRoomType(RoomType roomType) {
+    public int saveRoomType(FRProductTypeModel roomType) {
         int result = 0;
         try {
             String sql = "INSERT INTO roomtype (description, maxCapacity, status) VALUES (" +
@@ -37,7 +38,7 @@ public class RoomTypeImpl implements IRoomType {
     }
 
     @Override
-    public int updateRoomType(RoomType roomType) {
+    public int updateRoomType(FRProductTypeModel roomType) {
         int result = 0;
 
         try {
@@ -53,7 +54,7 @@ public class RoomTypeImpl implements IRoomType {
     }
 
     @Override
-    public int deleteRoomType(RoomType roomType) {
+    public int deleteRoomType(FRProductTypeModel roomType) {
         int result = 0;
         try {
             String sql = "DELETE FROM roomtype WHERE idRoomType = " + roomType.getCode();
@@ -77,7 +78,7 @@ public class RoomTypeImpl implements IRoomType {
     }
 
     @Override
-    public RoomType getRoomTypeById(int roomTypeId) {
+    public FRProductTypeModel getRoomTypeById(int roomTypeId) {
         RoomType roomType = null;
         try {
             String sql = "SELECT * FROM roomtype WHERE idRoomType = " + roomTypeId + " LIMIT 1";
@@ -96,8 +97,8 @@ public class RoomTypeImpl implements IRoomType {
     }
 
     @Override
-    public List<RoomType> getAllRoomType() {
-        List<RoomType> roomTypeList = new ArrayList<>();
+    public List<FRProductTypeModel> getAllRoomType() {
+        List<FRProductTypeModel> roomTypeList = new ArrayList<>();
         try {
             String sql = "SELECT * FROM roomtype";
             ResultSet rs = this.iDatabase.executeQuery(sql);

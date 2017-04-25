@@ -6,12 +6,12 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
-import main.dbsub.DBFacade;
+import main.dbsub.DBFacadeImpl;
 import main.dbsub.DBService;
-import main.dbsub.RoomImpl;
 import main.dbsub.RoomTypeImpl;
+import main.model.FRProductModel;
+import main.model.FRProductTypeModel;
 import main.model.Room;
-import main.model.RoomType;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -53,17 +53,17 @@ public class RoomRegistrationController implements Initializable, IController {
 
     @FXML
     private ComboBox cbRoomRegistration;
-    private List<RoomType> lstRooms = null;
+    private List<FRProductTypeModel> lstRooms = null;
 
     private Stage roomStage;
     private DBService dbService;
-    private Room editedRoom;
+    private FRProductModel editedRoom;
     private boolean isEditWindow = false;
 
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        this.dbService = new DBFacade();
+        this.dbService = new DBFacadeImpl();
         spnrRoomFloor = new Spinner(0, 120, 30);
         comboRoomTypelist();
     }
@@ -74,7 +74,7 @@ public class RoomRegistrationController implements Initializable, IController {
 
     }
 
-    public void setEditedRoomType(Room room) {
+    public void setEditedRoomType(FRProductModel room) {
         this.editedRoom = room;
 
         txtRoomCode.setText(String.valueOf(this.editedRoom.getCode()));
@@ -92,7 +92,7 @@ public class RoomRegistrationController implements Initializable, IController {
 
     public void setEditWindow(boolean value) {
         isEditWindow = value;
-        lblRoomEditForm.setText("Room Edit Form");
+        lblRoomEditForm.setText("FRProductModel Edit Form");
     }
 
     public void onBtnRoomSaveClicked() {
@@ -118,16 +118,16 @@ public class RoomRegistrationController implements Initializable, IController {
         float rPrice = Float.parseFloat(txtRoomPrice.getText());
         String status = txtStatus.getText();
 
-        RoomType roomType=this.dbService.getAllRoomType().stream().filter(r->r.getDescription().equals(selected_txt)).findAny().get();
+        FRProductTypeModel roomType=this.dbService.getAllRoomType().stream().filter(r->r.getDescription().equals(selected_txt)).findAny().get();
 
-        Room room = new Room(code, rName, rNumber, rStatus, rFloor, desc,roomType, maxCapacity, status, rPrice);
+        FRProductModel room = new Room(code, rName, rNumber, rStatus, rFloor, desc,roomType, maxCapacity, status, rPrice);
         int result = 0;
         if (!isEditWindow) {
-            // Add new Room Type
+            // Add new FRProductModel Type
             result = this.dbService.saveRoom(room);
             checkOperationResult(result, room);
         } else {
-            // Update Room Type
+            // Update FRProductModel Type
             this.editedRoom.setCode(code);
             this.editedRoom.setRoomName(rName);
             this.editedRoom.setRoomNumber(rNumber);
@@ -143,7 +143,7 @@ public class RoomRegistrationController implements Initializable, IController {
         }
     }
 
-    private void checkOperationResult(int result, Room room) {
+    private void checkOperationResult(int result, FRProductModel room) {
         if (result != 0) {
             // Save success
             this.roomStage.close();
@@ -171,14 +171,14 @@ public class RoomRegistrationController implements Initializable, IController {
 
 
     public interface RoomControllerListener{
-        public void onSaveRoomSuccess(Room room);
-        public void onUpdateRoomSuccess(Room room);
+        public void onSaveRoomSuccess(FRProductModel room);
+        public void onUpdateRoomSuccess(FRProductModel room);
         public void onSaveRoomFail(String errMessage);
 
     }
     public void comboRoomTypelist() {
 
-        List<RoomType> roomTypes = new RoomTypeImpl().getAllRoomType();
+        List<FRProductTypeModel> roomTypes = new RoomTypeImpl().getAllRoomType();
         lstRooms = new ArrayList<>();
         lstRooms = roomTypes;
         List<String> rooms = roomTypes.stream().map(rm -> rm.getDescription()).collect(Collectors.toList());

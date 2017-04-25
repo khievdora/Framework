@@ -1,12 +1,12 @@
 package main.authenticationsub.proxy;
 
-import main.model.Account;
+import main.model.FRAccountModel;
 
 /**
  * Created by Dora on 4/23/2017.
  */
 public interface IAuthentication {
 
-    public Account requestLogin(String userName, String password);
+    public FRAccountModel requestLogin(String userName, String password);
 
 }

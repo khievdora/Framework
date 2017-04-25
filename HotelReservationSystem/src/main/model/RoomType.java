@@ -8,7 +8,7 @@ import javafx.beans.property.StringProperty;
 /**
  * Created by Gize on 4/19/2017.
  */
-public class RoomType {
+public class RoomType implements FRProductTypeModel {
     private  IntegerProperty code;
     private  StringProperty description;
     private  IntegerProperty maxCapacity;

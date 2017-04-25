@@ -1,8 +1,8 @@
 package main.accountsub;
 
-import main.dbsub.DBFacade;
+import main.dbsub.DBFacadeImpl;
 import main.dbsub.DBService;
-import main.model.Account;
+import main.model.FRAccountModel;
 
 import java.util.List;
 
@@ -14,41 +14,41 @@ public class AccountFacade implements AccountService {
     private DBService dbService;
 
     public AccountFacade() {
-        this.dbService = new DBFacade();
+        this.dbService = new DBFacadeImpl();
     }
 
     @Override
-    public Account getAccount(String userName, String password) {
+    public FRAccountModel getAccount(String userName, String password) {
         return this.dbService.getAccountByUserNameAndPassword(userName, password);
     }
 
     @Override
-    public Account getAccountByUserName(String userName) {
+    public FRAccountModel getAccountByUserName(String userName) {
         return this.dbService.getAccountByUserName(userName);
     }
 
     @Override
-    public Account getAccountByUserId(String userId) {
+    public FRAccountModel getAccountByUserId(String userId) {
         return this.dbService.getAccountById(userId);
     }
 
     @Override
-    public List<Account> getAllAccount() {
+    public List<FRAccountModel> getAllAccount() {
         return this.dbService.getAllAccount();
     }
 
     @Override
-    public int saveAccount(Account account) {
+    public int saveAccount(FRAccountModel account) {
         return this.dbService.saveAccount(account);
     }
 
     @Override
-    public int updateAccount(Account account) {
+    public int updateAccount(FRAccountModel account) {
         return this.dbService.updateAccount(account);
     }
 
     @Override
-    public int deleteAccount(Account account) {
+    public int deleteAccount(FRAccountModel account) {
         return this.dbService.deleteAccount(account);
     }
 

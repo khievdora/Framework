@@ -1,6 +1,7 @@
 package main.dbsub;
 
 import main.model.Account;
+import main.model.FRAccountModel;
 
 import java.sql.ResultSet;
 import java.util.ArrayList;
@@ -14,7 +15,7 @@ public class AccountImpl implements IAccount {
     private IDatabase iDatabase = Database.getInstance();
 
     @Override
-    public int saveAccount(Account account) {
+    public int saveAccount(FRAccountModel account) {
         int accountId = 0;
         try{
             String query = "INSERT INTO account(username, password, status, userRole, accountStatus) VALUES(" +
@@ -37,7 +38,7 @@ public class AccountImpl implements IAccount {
     }
 
     @Override
-    public int updateAccount(Account account) {
+    public int updateAccount(FRAccountModel account) {
         int result = 0;
         try{
             String query ="UPDATE account SET " +
@@ -57,7 +58,7 @@ public class AccountImpl implements IAccount {
     }
 
     @Override
-    public int deleteAccount(Account account) {
+    public int deleteAccount(FRAccountModel account) {
         int result = 0;
         try{
             String sql = "DELETE FROM account WHERE idAccount = " + account.getCode();
@@ -86,7 +87,7 @@ public class AccountImpl implements IAccount {
     }
 
     @Override
-    public Account getAccountById(String accountId) {
+    public FRAccountModel getAccountById(String accountId) {
         String query = "SELECT * FROM account WHERE idAccount = "+ accountId;
         Account account = new Account();
         try{
@@ -109,7 +110,7 @@ public class AccountImpl implements IAccount {
     }
 
     @Override
-    public Account getAccountByUserName(String userName) {
+    public FRAccountModel getAccountByUserName(String userName) {
         String query = "SELECT * FROM account WHERE username = '"+ userName +"'";
         Account account = new Account();
         try{
@@ -132,7 +133,7 @@ public class AccountImpl implements IAccount {
     }
 
     @Override
-    public Account getAccountByUserNameAndPassword(String userName, String password) {
+    public FRAccountModel getAccountByUserNameAndPassword(String userName, String password) {
         String query = "SELECT * FROM account WHERE username = '"+ userName +"' AND password = '" +password+"'";
         Account account = new Account();
         try{
@@ -155,9 +156,9 @@ public class AccountImpl implements IAccount {
     }
 
     @Override
-    public List<Account> getAccountByFirstName(String firstName) {
+    public List<FRAccountModel> getAccountByFirstName(String firstName) {
         String query = "SELECT * FROM account WHERE username = '"+ firstName +"'";
-        List<Account> accounts = new ArrayList<Account>();
+        List<FRAccountModel> accounts = new ArrayList<>();
         Account account=new Account();
         try{
             ResultSet rs = iDatabase.executeQuery(query);
@@ -179,9 +180,9 @@ public class AccountImpl implements IAccount {
     }
 
     @Override
-    public List<Account> getAccountByLastName(String lastName) {
+    public List<FRAccountModel> getAccountByLastName(String lastName) {
         String query = "SELECT * FROM account WHERE username = '"+ lastName +"'";
-        List<Account> accounts = new ArrayList<Account>();
+        List<FRAccountModel> accounts = new ArrayList<>();
         Account account=new Account();
         try{
             ResultSet rs = iDatabase.executeQuery(query);
@@ -203,9 +204,9 @@ public class AccountImpl implements IAccount {
     }
 
     @Override
-    public List<Account> getAllAccount() {
+    public List<FRAccountModel> getAllAccount() {
         String query = "SELECT * FROM account";
-        List<Account> accounts = new ArrayList<Account>();
+        List<FRAccountModel> accounts = new ArrayList<>();
         try{
             ResultSet rs = iDatabase.executeQuery(query);
             while (rs.next()){

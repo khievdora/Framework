@@ -1,5 +1,6 @@
 package main.dbsub;
 
+import main.model.FRCustomerModel;
 import main.model.Guest;
 
 import java.sql.ResultSet;
@@ -14,7 +15,7 @@ public class GuestImpl implements IGuest {
     private IDatabase database = Database.getInstance();
 
     @Override
-    public int saveGuest(Guest guest) {
+    public int saveGuest(FRCustomerModel guest) {
         int guestId = 0;
         try {
             String sql = "INSERT INTO guest (firstName, middleName, lastName, idCard, passport, idAddress, " +
@@ -34,7 +35,7 @@ public class GuestImpl implements IGuest {
     }
 
     @Override
-    public int updateGuest(Guest guest) {
+    public int updateGuest(FRCustomerModel guest) {
         int result = 0;
         try {
             String sql = "UPDATE guest SET firstName = '" + guest.getfName() + "'," +
@@ -82,7 +83,7 @@ public class GuestImpl implements IGuest {
     }
 
     @Override
-    public Guest getGuestById(int guestId) {
+    public FRCustomerModel getGuestById(int guestId) {
         Guest guest = null;
         try {
             String sql = "SELECT * FROM guest WHERE idGuest = '" + guestId + "' LIMIT 1";
@@ -108,8 +109,8 @@ public class GuestImpl implements IGuest {
     }
 
     @Override
-    public List<Guest> getAllGuest() {
-        List<Guest> guestList = new ArrayList<>();
+    public List<FRCustomerModel> getAllGuest() {
+        List<FRCustomerModel> guestList = new ArrayList<>();
         Guest guest = null;
         try {
             String sql = "SELECT * FROM guest";

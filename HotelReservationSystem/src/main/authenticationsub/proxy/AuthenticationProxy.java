@@ -1,6 +1,7 @@
 package main.authenticationsub.proxy;
 
 import main.model.Account;
+import main.model.FRAccountModel;
 
 /**
  * Created by Dora on 4/23/2017.
@@ -14,7 +15,7 @@ public class AuthenticationProxy implements IAuthentication {
     }
 
     @Override
-    public Account requestLogin(String userName, String password) {
+    public FRAccountModel requestLogin(String userName, String password) {
         return this.authentication.requestLogin(userName, password);
     }
 }

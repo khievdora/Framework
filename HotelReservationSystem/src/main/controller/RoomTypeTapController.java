@@ -8,9 +8,9 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import main.Shared.WindowNavigation;
-import main.dbsub.DBFacade;
+import main.dbsub.DBFacadeImpl;
 import main.dbsub.DBService;
-import main.model.RoomType;
+import main.model.FRProductTypeModel;
 
 import javax.swing.*;
 import java.net.URL;
@@ -25,13 +25,13 @@ public class RoomTypeTapController implements Initializable, RoomTypeController.
     @FXML
     private TableView tblRoomType;
     @FXML
-    private TableColumn<RoomType, Void> num;
+    private TableColumn<FRProductTypeModel, Void> num;
     @FXML
-    private TableColumn<RoomType, String> idRoomType;
+    private TableColumn<FRProductTypeModel, String> idRoomType;
     @FXML
-    private TableColumn<RoomType, String> description;
+    private TableColumn<FRProductTypeModel, String> description;
     @FXML
-    private TableColumn<RoomType, Integer> maxCapacity;
+    private TableColumn<FRProductTypeModel, Integer> maxCapacity;
     @FXML
     private TextField txtRoomTypeSearch;
     @FXML
@@ -47,14 +47,14 @@ public class RoomTypeTapController implements Initializable, RoomTypeController.
 
 
     private DBService dbService;
-    private ObservableList<RoomType> originalRoomTypeList = FXCollections.observableArrayList();
-    private ObservableList<RoomType> modifiedRoomTypeList = FXCollections.observableArrayList();
+    private ObservableList<FRProductTypeModel> originalRoomTypeList = FXCollections.observableArrayList();
+    private ObservableList<FRProductTypeModel> modifiedRoomTypeList = FXCollections.observableArrayList();
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        dbService = new DBFacade();
+        dbService = new DBFacadeImpl();
 
-        // Load RoomType list from Database
+        // Load FRProductTypeModel list from Database
         originalRoomTypeList = FXCollections.observableArrayList(dbService.getAllRoomType());
 
         // Init Table view and load data
@@ -63,13 +63,13 @@ public class RoomTypeTapController implements Initializable, RoomTypeController.
     }
 
     @Override
-    public void onSaveSuccess(RoomType roomType) {
+    public void onSaveSuccess(FRProductTypeModel roomType) {
         originalRoomTypeList.add(roomType);
         onBtnRoomTypeRefreshClicked();
     }
 
     @Override
-    public void onUpdateSuccess(RoomType roomType) {
+    public void onUpdateSuccess(FRProductTypeModel roomType) {
         //onBtnRoomTypeRefreshClicked();
         //tblRoomType.notifyAll();
         originalRoomTypeList.notify();
@@ -88,7 +88,7 @@ public class RoomTypeTapController implements Initializable, RoomTypeController.
         maxCapacity = new TableColumn<>("Capacity");
 
         num.setCellFactory(col -> {
-            TableCell<RoomType, Void> cell = new TableCell<>();
+            TableCell<FRProductTypeModel, Void> cell = new TableCell<>();
             cell.textProperty().bind(Bindings.createStringBinding(() -> {
                 if (cell.isEmpty()) {
                     return null;
@@ -119,7 +119,7 @@ public class RoomTypeTapController implements Initializable, RoomTypeController.
     }
     public void onBtnRoomTypeAddClicked(){
         RoomTypeController roomTypeController = (RoomTypeController) new WindowNavigation().navigateToWindow("Add Room Type",
-                "../../resource/view/RoomType.fxml");
+                "../../resource/view/FRProductTypeModel.fxml");
         roomTypeController.setRoomTypeControllerListener(this);
 
     }
@@ -128,11 +128,11 @@ public class RoomTypeTapController implements Initializable, RoomTypeController.
     }
 
     public void onBtnRoomTypeEditClicked(){
-        RoomType roomTypeToEdit = (RoomType) tblRoomType.getSelectionModel().getSelectedItem();
+        FRProductTypeModel roomTypeToEdit = (FRProductTypeModel) tblRoomType.getSelectionModel().getSelectedItem();
         if (roomTypeToEdit != null) {
             RoomTypeController roomTypeController = (RoomTypeController) new WindowNavigation().navigateToWindow("Edit Room Type",
-                    "../../resource/view/RoomType.fxml");
-            roomTypeController.setEditedRoomType((RoomType) tblRoomType.getSelectionModel().getSelectedItem());
+                    "../../resource/view/FRProductTypeModel.fxml");
+            roomTypeController.setEditedRoomType((FRProductTypeModel) tblRoomType.getSelectionModel().getSelectedItem());
             //roomTypeController.setEditWindow(true);
             roomTypeController.setRoomTypeControllerListener(this);
         } else {
@@ -140,7 +140,7 @@ public class RoomTypeTapController implements Initializable, RoomTypeController.
         }
     }
     public void onBtnRoomTypeDeleteClicked(){
-        RoomType selectedRoomType = (RoomType) tblRoomType.getSelectionModel().getSelectedItem();
+        FRProductTypeModel selectedRoomType = (FRProductTypeModel) tblRoomType.getSelectionModel().getSelectedItem();
         int result = this.dbService.deleteRoomType(selectedRoomType);
         // Display confirm message to delete item.
         if (result != 0) {

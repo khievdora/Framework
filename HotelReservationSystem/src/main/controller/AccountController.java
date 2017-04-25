@@ -11,7 +11,13 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import main.accountsub.AccountFacade;
 import main.accountsub.AccountService;
+import main.business.account.AccountHandler;
+import main.business.account.AccountHandlerImpl;
+import main.business.account.listener.SaveAccountListener;
+import main.db.DBFacade;
+import main.dbsub.DBFacadeImpl;
 import main.model.Account;
+import main.model.FRAccountModel;
 import main.statusenums.AccountStatus;
 import main.statusenums.Status;
 import main.statusenums.UserRole;
@@ -57,15 +63,18 @@ public class AccountController implements Initializable, IController {
     private AccountControllerListener listener;
 
     private AccountService accountService;
+    private AccountHandler accountHandler;
     private Stage accountStage;
     private boolean isEditAccount = false;
-    private Account account;
+    private FRAccountModel account;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
-        // Initialize Account Service
+        // Initialize FRAccountModel Service
         this.accountService = new AccountFacade();
+
+        accountHandler = new AccountHandlerImpl(new DBFacadeImpl());
 
         // Load data into ComboBox
         loadDataIntoComboBox();
@@ -79,10 +88,10 @@ public class AccountController implements Initializable, IController {
         this.accountStage = stage;
     }
 
-    public void setAccount(Account account) {
+    public void setAccount(FRAccountModel account) {
         this.account = account;
         this.isEditAccount = true;
-        lblAccountTitle.setText("Account Edit Form");
+        lblAccountTitle.setText("FRAccountModel Edit Form");
         txtUserName.setText(this.account.getUserName());
         txtPassword.setText(this.account.getPassword());
         cboAccountStatus.setValue(this.account.getAccountStatus());
@@ -100,29 +109,51 @@ public class AccountController implements Initializable, IController {
         String status = (String) cboStatus.getSelectionModel().getSelectedItem();
         String userRole = (String) cboUserRole.getSelectionModel().getSelectedItem();
         String accountStatus = (String) cboAccountStatus.getSelectionModel().getSelectedItem();
+        if (account == null) {
+            account = new Account();
+        }
+        this.account.setUserName(userName);
+        this.account.setPassword(password);
+        this.account.setStatus(status);
+        this.account.setUserRole(userRole);
+        this.account.setAccountStatus(accountStatus);
 
-        if (userName.isEmpty()) {
-            lblErrMessage.setVisible(true);
-            lblErrMessage.setText("User Name is required!");
-        } else if (password.isEmpty()) {
-            lblErrMessage.setVisible(true);
-            lblErrMessage.setText("Password is required!");
-        } else {
-            if (account == null) {
-                account = new Account();
-            }
-            this.account.setUserName(userName);
-            this.account.setPassword(password);
-            this.account.setStatus(status);
-            this.account.setUserRole(userRole);
-            this.account.setAccountStatus(accountStatus);
+
+//        if (userName.isEmpty()) {
+//            lblErrMessage.setVisible(true);
+//            lblErrMessage.setText("User Name is required!");
+//        } else if (password.isEmpty()) {
+//            lblErrMessage.setVisible(true);
+//            lblErrMessage.setText("Password is required!");
+//        } else {
+//            if (account == null) {
+//                account = new Account();
+//            }
+//            this.account.setUserName(userName);
+//            this.account.setPassword(password);
+//            this.account.setStatus(status);
+//            this.account.setUserRole(userRole);
+//            this.account.setAccountStatus(accountStatus);
 
             if (isEditAccount) {
                 editAccount();
             } else {
-                saveAccount();
+                //saveAccount();
+                accountHandler.saveAccount(account, new SaveAccountListener<FRAccountModel>() {
+                    @Override
+                    public void onSaveSuccess(FRAccountModel accountModel) {
+                        accountStage.close();
+                        listener.onSaveSuccess(accountModel);
+                    }
+
+                    @Override
+                    public void onSaveFail(String errMessage) {
+                        lblErrMessage.setVisible(true);
+                        lblErrMessage.setText(errMessage);
+                    }
+                });
             }
-        }
+
     }
 
     public void saveAccount() {
@@ -136,8 +167,8 @@ public class AccountController implements Initializable, IController {
     }
 
     public void editAccount() {
-        System.out.println("Update Account");
-        System.out.println("Account " + this.account.toString());
+        System.out.println("Update FRAccountModel");
+        System.out.println("FRAccountModel " + this.account.toString());
         int result = this.accountService.updateAccount(this.account);
         System.out.println("Result = " + result);
         this.accountStage.close();
@@ -162,8 +193,8 @@ public class AccountController implements Initializable, IController {
     }
 
     public interface AccountControllerListener {
-        public void onSaveSuccess(Account account);
-        public void onUpdateSuccess(Account account);
+        public void onSaveSuccess(FRAccountModel account);
+        public void onUpdateSuccess(FRAccountModel account);
         public void onSaveFail(String errMessage);
     }
 }

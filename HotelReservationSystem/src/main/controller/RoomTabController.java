@@ -2,65 +2,59 @@ package main.controller;
 
 import javafx.beans.property.FloatProperty;
 import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.control.ComboBox;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.stage.Stage;
 import main.Shared.WindowNavigation;
-import main.dbsub.DBFacade;
+import main.dbsub.DBFacadeImpl;
 import main.dbsub.DBService;
+import main.model.FRProductModel;
+import main.model.FRProductTypeModel;
 import main.model.Room;
-import main.model.RoomType;
 
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
-import java.util.stream.Collectors;
 
 /**
  * Created by gebre on 4/23/2017.
  */
 public class RoomTabController implements Initializable, RoomRegistrationController.RoomControllerListener {
     @FXML
-    private TableColumn<Room, IntegerProperty> code;
+    private TableColumn<FRProductModel, IntegerProperty> code;
     @FXML
-    private TableColumn<Room, StringProperty> roomName;
+    private TableColumn<FRProductModel, StringProperty> roomName;
     @FXML
-    private TableColumn<Room, IntegerProperty> roomNumber;
+    private TableColumn<FRProductModel, IntegerProperty> roomNumber;
     @FXML
-    private TableColumn<Room, StringProperty> roomStatus;
+    private TableColumn<FRProductModel, StringProperty> roomStatus;
     @FXML
-    private TableColumn<Room, IntegerProperty> floor;
+    private TableColumn<FRProductModel, IntegerProperty> floor;
     @FXML
-    private TableColumn<Room, StringProperty> description;
+    private TableColumn<FRProductModel, StringProperty> description;
     @FXML
-    private TableColumn<Room, RoomType> roomType;
+    private TableColumn<FRProductModel, FRProductTypeModel> roomType;
     @FXML
-    private TableColumn<Room, IntegerProperty> maxQuest;
+    private TableColumn<FRProductModel, IntegerProperty> maxQuest;
     @FXML
-    private TableColumn<Room, StringProperty> status;
+    private TableColumn<FRProductModel, StringProperty> status;
     @FXML
-    private TableColumn<Room, FloatProperty> price;
+    private TableColumn<FRProductModel, FloatProperty> price;
 
 
     @FXML
     private TableView tblVWRoom;
-    private List<Room> lstRooms;
+    private List<FRProductModel> lstRooms;
 
     private DBService dbService;
-    private ObservableList<Room> originalRoomList = FXCollections.observableArrayList();
-    private ObservableList<Room> modifiedRoomList = FXCollections.observableArrayList();
+    private ObservableList<FRProductModel> originalRoomList = FXCollections.observableArrayList();
+    private ObservableList<FRProductModel> modifiedRoomList = FXCollections.observableArrayList();
 
 
 
@@ -70,12 +64,12 @@ public class RoomTabController implements Initializable, RoomRegistrationControl
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         //Initialize Database service
-        this.dbService = new DBFacade();
+        this.dbService = new DBFacadeImpl();
 
         //get all room lists
         originalRoomList = FXCollections.observableArrayList(dbService.getAllRoom());
 
-        //Initialize Room TableView
+        //Initialize FRProductModel TableView
         loadRoomListIntoView();
 
 
@@ -83,12 +77,12 @@ public class RoomTabController implements Initializable, RoomRegistrationControl
 
     private void loadRoomListIntoView() {
         code = new TableColumn<>("Id");
-        roomName = new TableColumn<>("Room Name");
+        roomName = new TableColumn<>("FRProductModel Name");
         roomNumber = new TableColumn<>("Rooom No");
-        roomStatus = new TableColumn<>("Room Status");
+        roomStatus = new TableColumn<>("FRProductModel Status");
         floor = new TableColumn<>("Floor");
         description = new TableColumn<>("Description");
-        roomType = new TableColumn<>("Room Type");
+        roomType = new TableColumn<>("FRProductModel Type");
         maxQuest = new TableColumn<>("Mam Capacity");
         status = new TableColumn<>("Status");
         price = new TableColumn<>("Price");
@@ -112,26 +106,26 @@ public class RoomTabController implements Initializable, RoomRegistrationControl
 
     }
 
-    private List<Room> parseRoomLists() {
+    private List<FRProductModel> parseRoomLists() {
         lstRooms = this.dbService.getAllRoom();
-        List<Room> rooms = new ArrayList<>();
-        for(Room rm:lstRooms){
+        List<FRProductModel> rooms = new ArrayList<>();
+        for(FRProductModel rm:lstRooms){
             int rmcode = rm.getCode();
             String rmName = rm.getRoomName();
             int rmNumber = rm.getRoomNumber();
             String rmStatus =rm.getStatus();
             int rmFloor = rm.getFloor();
             String rmDescription = rm.getDescription();
-            RoomType rmRoomType = rm.getRoomType();
+            FRProductTypeModel rmRoomType = rm.getRoomType();
             int rmMaxCapacity = rm.getMaxQuest();
             String Status = rm.getStatus();
             Float rmPrice = rm.getPrice();
-            Room room = new Room(rmcode,rmName,rmNumber,rmStatus,rmFloor,rmDescription,rmRoomType,rmMaxCapacity,Status,rmPrice);
+            FRProductModel room = new Room(rmcode,rmName,rmNumber,rmStatus,rmFloor,rmDescription,rmRoomType,rmMaxCapacity,Status,rmPrice);
             rooms.add(room);
 
 
         }
-        final ObservableList<Room> list = FXCollections.observableArrayList();
+        final ObservableList<FRProductModel> list = FXCollections.observableArrayList();
         list.addAll(rooms);
         return list;
     }
@@ -147,7 +141,7 @@ public class RoomTabController implements Initializable, RoomRegistrationControl
     }
     public void onBtnRoomAddClicked(){
         System.out.println("Button save clicked!!");
-        RoomRegistrationController roomTypeController = (RoomRegistrationController) new WindowNavigation().navigateToWindow("Add Room",
+        RoomRegistrationController roomTypeController = (RoomRegistrationController) new WindowNavigation().navigateToWindow("Add FRProductModel",
                 "../../resource/view/RoomRegistrationForm.fxml");
         roomTypeController.setRoomControllerListener(this);
 //        try {
@@ -170,15 +164,15 @@ public class RoomTabController implements Initializable, RoomRegistrationControl
 
     }
     public void onBtnRoomEditClicked(){
-        RoomRegistrationController roomRegisterController = (RoomRegistrationController) new WindowNavigation().navigateToWindow("Edit Room Type",
+        RoomRegistrationController roomRegisterController = (RoomRegistrationController) new WindowNavigation().navigateToWindow("Edit FRProductModel Type",
                 "../../resource/view/RoomRegistrationForm.fxml");
-        roomRegisterController.setEditedRoomType((Room) tblVWRoom.getSelectionModel().getSelectedItem());
+        roomRegisterController.setEditedRoomType((FRProductModel) tblVWRoom.getSelectionModel().getSelectedItem());
         roomRegisterController.setEditWindow(true);
         roomRegisterController.setRoomControllerListener(this);
 
     }
     public void onBtnRoomDeleteClicked(){
-        Room selectedRoom = (Room) tblVWRoom.getSelectionModel().getSelectedItem();
+        FRProductModel selectedRoom = (FRProductModel) tblVWRoom.getSelectionModel().getSelectedItem();
         int result = this.dbService.deleteRoom(selectedRoom);
         // Display confirm message to delete item.
         if (result != 0) {
@@ -191,13 +185,13 @@ public class RoomTabController implements Initializable, RoomRegistrationControl
     }
 
     @Override
-    public void onSaveRoomSuccess(Room room) {
+    public void onSaveRoomSuccess(FRProductModel room) {
         originalRoomList.add(room);
         onBtnRoomRefreshClicked();
     }
 
     @Override
-    public void onUpdateRoomSuccess(Room room) {
+    public void onUpdateRoomSuccess(FRProductModel room) {
         tblVWRoom.notifyAll();
     }
 

@@ -8,7 +8,7 @@ import javafx.beans.property.StringProperty;
 /**
  * Created by Gize on 4/19/2017.
  */
-public class Address {
+public class Address implements FRAddressModel{
     private IntegerProperty code;
     private  StringProperty zip;
     private  StringProperty street;

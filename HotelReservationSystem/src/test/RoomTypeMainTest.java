@@ -2,7 +2,7 @@ package test;
 
 import main.dbsub.IRoomType;
 import main.dbsub.RoomTypeImpl;
-import main.model.RoomType;
+import main.model.FRProductTypeModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +20,7 @@ public class RoomTypeMainTest {
 
         // Add new RoomTypeTapController
         //RoomTypeTapController roomType = new RoomTypeTapController(0, "QUEEN ROOM", 5);
-        RoomType roomType = iRoomType.getRoomTypeById(4);
+        FRProductTypeModel roomType = iRoomType.getRoomTypeById(4);
         //iRoomType.saveRoomType(roomType);
         System.out.println("RoomTypeTapController = " + roomType.toString());
 
@@ -32,13 +32,13 @@ public class RoomTypeMainTest {
         iRoomType.updateRoomType(roomType);
 
         //Load List of RoomTypeTapController
-        List<RoomType> roomTypeList = new ArrayList<>();
+        List<FRProductTypeModel> roomTypeList = new ArrayList<>();
         roomTypeList = iRoomType.getAllRoomType();
         mainTest.displayAllRoomType(roomTypeList);
 
     }
 
-    public void displayAllRoomType(List<RoomType> roomTypeList) {
+    public void displayAllRoomType(List<FRProductTypeModel> roomTypeList) {
         System.out.println("-------------------------------");
         System.out.println("RoomController Type List");
         System.out.println("-------------------------------");

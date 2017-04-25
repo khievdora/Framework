@@ -5,17 +5,17 @@ import javafx.beans.property.*;
 /**
  * Created by Gize on 4/19/2017.
  */
-public class Guest {
+public class Guest implements FRCustomerModel {
     private IntegerProperty code;
     private  StringProperty fName;
     private  StringProperty mName;
     private  StringProperty lName;
     private  StringProperty idCard;
     private  StringProperty passport;
-    private  ObjectProperty<Address> address;
+    private  ObjectProperty<FRAddressModel> address;
     private  StringProperty phone;
 
-    public Guest(int code, String fName, String mName, String lName, String idCard, String passport, Address address, String phone) {
+    public Guest(int code, String fName, String mName, String lName, String idCard, String passport, FRAddressModel address, String phone) {
         this.code = new SimpleIntegerProperty(code);
         this.fName = new SimpleStringProperty(fName);
         this.mName = new SimpleStringProperty(mName);
@@ -98,11 +98,16 @@ public class Guest {
         this.passport.set(passport);
     }
 
-    public Address getAddress() {
+    public FRAddressModel getAddress() {
         return address.get();
     }
 
-    public ObjectProperty<Address> addressProperty() {
+    @Override
+    public void setAddress(FRAddressModel FRAddressModel) {
+
+    }
+
+    public ObjectProperty<FRAddressModel> addressProperty() {
         return address;
     }
 

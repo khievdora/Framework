@@ -1,10 +1,9 @@
 package main.dbsub;
+import main.model.FRReservationModel;
 import main.model.Reservation;
 
-import java.sql.Date;
 import java.sql.ResultSet;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -17,7 +16,7 @@ public class ReservationImpl implements IReservation {
         iDatabase = Database.getInstance();
     }
     @Override
-    public int saveReservation(Reservation reservation) {
+    public int saveReservation(FRReservationModel reservation) {
         int reservationId = 0;
         try{
 
@@ -43,7 +42,7 @@ public class ReservationImpl implements IReservation {
     }
 
     @Override
-    public int updateReservation(Reservation reservation) {
+    public int updateReservation(FRReservationModel reservation) {
         int result = 0;
         try{
 
@@ -93,9 +92,9 @@ public class ReservationImpl implements IReservation {
         return result;
     }
     @Override
-    public List<Reservation> getAllReservation() {
+    public List<FRReservationModel> getAllReservation() {
         String query = "SELECT * FROM reservation";
-        List<Reservation> reservations = new ArrayList<Reservation>();
+        List<FRReservationModel> reservations = new ArrayList<>();
         try{
             ResultSet rs = iDatabase.executeQuery(query);
             while (rs.next()){
@@ -123,7 +122,7 @@ public class ReservationImpl implements IReservation {
     }
 
     @Override
-    public Reservation getReservatinById(int idReservation) {
+    public FRReservationModel getReservatinById(int idReservation) {
         String query = "SELECT * FROM reservation WHERE idReservation="+idReservation;
         Reservation reservation=new Reservation();
         try{

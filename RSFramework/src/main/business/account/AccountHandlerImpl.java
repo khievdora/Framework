@@ -13,7 +13,6 @@ public class AccountHandlerImpl extends AccountHandler {
 
     public AccountHandlerImpl(DBFacade dbFacade) {
         super(dbFacade);
-
     }
 
     @Override
@@ -39,6 +38,7 @@ public class AccountHandlerImpl extends AccountHandler {
     public boolean validateInvalidFields(FRAccountModel account, SaveAccountListener listener) {
         if (account.getPassword().length() < 5) {
             listener.onSaveFail("Password must be at least 5 characters!");
+            return false;
         }
         return true;
     }

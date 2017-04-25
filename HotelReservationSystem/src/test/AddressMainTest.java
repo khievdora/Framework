@@ -2,7 +2,7 @@ package test;
 
 import main.dbsub.AddressImpl;
 import main.dbsub.IAddress;
-import main.model.Address;
+import main.model.FRAddressModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,32 +19,32 @@ public class AddressMainTest {
         IAddress iAddress = new AddressImpl();
 
         // List all address
-        List<Address> addressList = new ArrayList<>();
+        List<FRAddressModel> addressList = new ArrayList<>();
         addressList = iAddress.getAllAddress();
         main.displayAllAddresses(addressList);
 
         // Add address
-//        Address address = new Address(0, "52558", "12 K Kerkwood St", "Fairfield", "IOWA",
+//        FRAddressModel address = new FRAddressModel(0, "52558", "12 K Kerkwood St", "Fairfield", "IOWA",
 //                "USA");
 //        iAddress.saveAddress(address);
 
         // Update address
-//        Address updateAddress = iAddress.getAddressById(3);
+//        FRAddressModel updateAddress = iAddress.getAddressById(3);
 //        updateAddress.setState("TEXAS");
 //        updateAddress.setZip("53443");
 //        iAddress.updateAddress(updateAddress);
 //        System.out.println(updateAddress.toString());
 
-        // Delete Address
+        // Delete FRAddressModel
         iAddress.deleteAddressById(3);
         addressList = iAddress.getAllAddress();
         main.displayAllAddresses(addressList);
 
     }
 
-    public void displayAllAddresses(List<Address> addressList) {
+    public void displayAllAddresses(List<FRAddressModel> addressList) {
         System.out.println("-------------------------------");
-        System.out.println("Address List");
+        System.out.println("FRAddressModel List");
         System.out.println("-------------------------------");
         addressList.forEach(System.out::println);
     }

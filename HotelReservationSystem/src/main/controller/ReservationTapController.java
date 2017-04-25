@@ -13,24 +13,18 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
-import javafx.util.Callback;
 import main.ReservationSub.command.ReservationSubSystemOperations;
-import main.Shared.UrlLoader;
-import main.dbsub.DBFacade;
+import main.dbsub.DBFacadeImpl;
 import main.dbsub.DBService;
 import main.model.*;
-import main.model.Guest;
 
 import javax.swing.*;
-import java.io.IOException;
 import java.net.URL;
 import java.sql.Date;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
-import java.util.stream.Collectors;
 
 /**
  * Created by gebre on 4/22/2017.
@@ -40,27 +34,27 @@ public class ReservationTapController implements Initializable {
     private javafx.scene.control.TableView tblVWReservation;
 
     @FXML
-    private TableColumn<Reservation, String> code;
+    private TableColumn<FRReservationModel, String> code;
     @FXML
-    private TableColumn<Reservation, Room> room;
+    private TableColumn<FRReservationModel, FRProductModel> room;
     @FXML
-    private TableColumn<Reservation, Guest> guest;
+    private TableColumn<FRReservationModel, Guest> guest;
     @FXML
-    private TableColumn<Reservation, Date> checkInDate;
+    private TableColumn<FRReservationModel, Date> checkInDate;
     @FXML
-    private TableColumn<Reservation, Date> bookedDate;
+    private TableColumn<FRReservationModel, Date> bookedDate;
     @FXML
-    private TableColumn<Reservation, Date> checkOutDate;
+    private TableColumn<FRReservationModel, Date> checkOutDate;
     @FXML
-    private TableColumn<Reservation, String> status;
+    private TableColumn<FRReservationModel, String> status;
     @FXML
     private TextField txtReservationSearch;
 
-    List<Reservation> regList = null;
+    List<FRReservationModel> regList = null;
     private DBService dbService;
 
     public ReservationTapController() {
-        this.dbService = new DBFacade();
+        this.dbService = new DBFacadeImpl();
     }
 
     public void onTxtReservationSearch() {
@@ -112,7 +106,7 @@ public class ReservationTapController implements Initializable {
             Parent root1 = (Parent) fxmlLoader.load();
             Stage stage = new Stage();
             ReservationController reserveCtrl = fxmlLoader.<main.controller.ReservationController>getController();
-            reserveCtrl.setEditedReservation((Reservation) tblVWReservation.getSelectionModel().getSelectedItem());
+            reserveCtrl.setEditedReservation((FRReservationModel) tblVWReservation.getSelectionModel().getSelectedItem());
             reserveCtrl.setEditWindow(true);
             stage.setScene(new Scene(root1));
             reserveCtrl.setStage(stage);
@@ -125,7 +119,7 @@ public class ReservationTapController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         code = new TableColumn("Id");
-        room = new TableColumn("Room");
+        room = new TableColumn("FRProductModel");
         guest = new TableColumn("Guest");
         checkInDate = new TableColumn("CheckIn Date");
         bookedDate = new TableColumn("Booked Date");
@@ -157,8 +151,8 @@ public class ReservationTapController implements Initializable {
         //  tblVWReservation.setItems(null);
         regList = null;
         // 1. Wrap the ObservableList in a FilteredList (initially display all data).
-        ObservableList<Reservation> masterData = (ObservableList<Reservation>) parseReservationList();
-        FilteredList<Reservation> filteredData = new FilteredList<>(masterData, p -> true);
+        ObservableList<FRReservationModel> masterData = (ObservableList<FRReservationModel>) parseReservationList();
+        FilteredList<FRReservationModel> filteredData = new FilteredList<>(masterData, p -> true);
 
         // 2. Set the filter Predicate whenever the filter changes.
         txtReservationSearch.textProperty().addListener((observable, oldValue, newValue) -> {
@@ -181,7 +175,7 @@ public class ReservationTapController implements Initializable {
         });
 
         // 3. Wrap the FilteredList in a SortedList.
-        SortedList<Reservation> sortedData = new SortedList<>(filteredData);
+        SortedList<FRReservationModel> sortedData = new SortedList<>(filteredData);
 
         // 4. Bind the SortedList comparator to the TableView comparator.
         sortedData.comparatorProperty().bind(tblVWReservation.comparatorProperty());
@@ -189,30 +183,30 @@ public class ReservationTapController implements Initializable {
         tblVWReservation.setItems(sortedData);
     }
 
-    private List<Reservation> parseReservationList() {
+    private List<FRReservationModel> parseReservationList() {
 
         regList = this.dbService.getAllReservation();
-        List<Reservation> modifiedList = new ArrayList<>();
+        List<FRReservationModel> modifiedList = new ArrayList<>();
 
-        for (Reservation reg : regList) {
+        for (FRReservationModel reg : regList) {
 
             int code = reg.getCode();
-            Room room = reg.getRoom();
-            main.model.Guest guest = reg.getGuest();
+            FRProductModel room = reg.getRoom();
+            FRCustomerModel guest = reg.getGuest();
             Date checkIn = reg.getCheckInDate();
             Date booked = reg.getBookedDate();
             Date checkOut = reg.getCheckOut();
             String status = reg.getRegistrationStatus();
-            Reservation acc = new Reservation(code, checkIn, booked, checkOut, guest, room, status);
+            FRReservationModel acc = new Reservation(code, checkIn, booked, checkOut, guest, room, status);
             modifiedList.add(acc);
         }
-        final ObservableList<Reservation> list = FXCollections.observableArrayList();
+        final ObservableList<FRReservationModel> list = FXCollections.observableArrayList();
         list.addAll(modifiedList);
         return list;
     }
 
     public void checkOut() {
-        Reservation reservation = (Reservation) tblVWReservation.getSelectionModel().getSelectedItem();
+        FRReservationModel reservation = (FRReservationModel) tblVWReservation.getSelectionModel().getSelectedItem();
         if (reservation != null) {
             if (reservation.getRegistrationStatus().equals("CHECKIN")) {
 
@@ -239,20 +233,20 @@ public class ReservationTapController implements Initializable {
     }
 
     public void cancelReservation() {
-        Reservation person = (Reservation) tblVWReservation.getSelectionModel().getSelectedItem();
+        FRReservationModel person = (FRReservationModel) tblVWReservation.getSelectionModel().getSelectedItem();
         if (person != null) {
             if (person.getRegistrationStatus() != "CANCELLED") {
                 // Guest gu = person.getGuest();
-                // Room rm = person.getRoom();
+                // FRProductModel rm = person.getRoom();
                 // person.setGuest((Guest) allGuests.stream().filter(r -> r.getfName().equals(gu.getfName())));
-                //  person.setRoom((Room) allRooms.stream().filter(r -> r.getRoomNumber() == rm.getRoomNumber()));
+                //  person.setRoom((FRProductModel) allRooms.stream().filter(r -> r.getRoomNumber() == rm.getRoomNumber()));
                 person.setRegistrationStatus("CANCELLED");
                 //update the registration here
                 try {
                     Boolean isUpdated = new ReservationSubSystemOperations().editReservation(person);
 
                     if (isUpdated) {
-                        JOptionPane.showMessageDialog(null, "Reservation cancelled successfully.");
+                        JOptionPane.showMessageDialog(null, "FRReservationModel cancelled successfully.");
                     } else {
                         JOptionPane.showMessageDialog(null, "There is an error in cancelling this reservation!");
                     }
@@ -269,7 +263,7 @@ public class ReservationTapController implements Initializable {
     }
 
     public void deleteReservation() {
-        Reservation reservation = (Reservation) tblVWReservation.getSelectionModel().getSelectedItem();
+        FRReservationModel reservation = (FRReservationModel) tblVWReservation.getSelectionModel().getSelectedItem();
         if (reservation != null) {
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setTitle("Delete Confirmation");

@@ -7,8 +7,9 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-import main.dbsub.DBFacade;
+import main.dbsub.DBFacadeImpl;
 import main.dbsub.DBService;
+import main.model.FRProductTypeModel;
 import main.model.RoomType;
 
 import java.net.URL;
@@ -27,12 +28,12 @@ public class RoomTypeController implements Initializable, IController {
 
     private Stage roomTypeStage;
     private RoomTypeControllerListener listener;
-    private RoomType editedRoomType;
+    private FRProductTypeModel editedRoomType;
     private boolean isEditWindow = false;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        this.dbService = new DBFacade();
+        this.dbService = new DBFacadeImpl();
     }
 
     @Override
@@ -40,10 +41,10 @@ public class RoomTypeController implements Initializable, IController {
         this.roomTypeStage = roomTypeStage;
     }
 
-    public void setEditedRoomType(RoomType roomType) {
+    public void setEditedRoomType(FRProductTypeModel roomType) {
         this.editedRoomType = roomType;
         isEditWindow = true;
-        lblRoomTypeTitle.setText("RoomType Edit Form");
+        lblRoomTypeTitle.setText("FRProductTypeModel Edit Form");
         txtDescription.setText(this.editedRoomType.getDescription());
         txtMaxGuest.setText(this.editedRoomType.getMaxCapacity() + "");
     }
@@ -60,7 +61,7 @@ public class RoomTypeController implements Initializable, IController {
         String desc = txtDescription.getText();
         int maxCapacity = Integer.parseInt(txtMaxGuest.getText());
 
-        RoomType roomType = new RoomType(code, desc, maxCapacity);
+        FRProductTypeModel roomType = new RoomType(code, desc, maxCapacity);
         int result = 0;
         if (!isEditWindow) {
             // Add new Room Type
@@ -84,7 +85,7 @@ public class RoomTypeController implements Initializable, IController {
         this.listener = listener;
     }
 
-    private void checkOperationResult(int result, RoomType roomType) {
+    private void checkOperationResult(int result, FRProductTypeModel roomType) {
         if (result != 0) {
             // Save success
             this.roomTypeStage.close();
@@ -101,8 +102,8 @@ public class RoomTypeController implements Initializable, IController {
     }
 
     public interface RoomTypeControllerListener {
-        public void onSaveSuccess(RoomType roomType);
-        public void onUpdateSuccess(RoomType roomType);
+        public void onSaveSuccess(FRProductTypeModel roomType);
+        public void onUpdateSuccess(FRProductTypeModel roomType);
         public void onSaveFail(String errMessage);
     }
 }

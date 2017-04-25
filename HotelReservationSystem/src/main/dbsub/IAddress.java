@@ -1,6 +1,6 @@
 package main.dbsub;
 
-import main.model.Address;
+import main.model.FRAddressModel;
 
 import java.util.List;
 
@@ -9,12 +9,12 @@ import java.util.List;
  */
 public interface IAddress {
 
-    public int saveAddress(Address address);
-    public int updateAddress(Address address);
-    public int deleteAddress(Address address);
+    public int saveAddress(FRAddressModel address);
+    public int updateAddress(FRAddressModel address);
+    public int deleteAddress(FRAddressModel address);
     public int deleteAddressById(int addressId);
-    public Address getAddressById(int addressId);
-    public List<Address> getAllAddress();
+    public FRAddressModel getAddressById(int addressId);
+    public List<FRAddressModel> getAllAddress();
 
 
 }
