@@ -13,6 +13,7 @@ import main.accountsub.AccountFacade;
 import main.accountsub.AccountService;
 import main.business.account.AccountHandler;
 import main.business.account.AccountHandlerImpl;
+import main.business.account.listener.SaveAccountListener;
 import main.db.DBFacade;
 import main.dbsub.DBFacadeImpl;
 import main.model.Account;
@@ -108,29 +109,51 @@ public class AccountController implements Initializable, IController {
         String status = (String) cboStatus.getSelectionModel().getSelectedItem();
         String userRole = (String) cboUserRole.getSelectionModel().getSelectedItem();
         String accountStatus = (String) cboAccountStatus.getSelectionModel().getSelectedItem();
+        if (account == null) {
+            account = new Account();
+        }
+        this.account.setUserName(userName);
+        this.account.setPassword(password);
+        this.account.setStatus(status);
+        this.account.setUserRole(userRole);
+        this.account.setAccountStatus(accountStatus);
 
-        if (userName.isEmpty()) {
-            lblErrMessage.setVisible(true);
-            lblErrMessage.setText("User Name is required!");
-        } else if (password.isEmpty()) {
-            lblErrMessage.setVisible(true);
-            lblErrMessage.setText("Password is required!");
-        } else {
-            if (account == null) {
-                account = new Account();
-            }
-            this.account.setUserName(userName);
-            this.account.setPassword(password);
-            this.account.setStatus(status);
-            this.account.setUserRole(userRole);
-            this.account.setAccountStatus(accountStatus);
+
+//        if (userName.isEmpty()) {
+//            lblErrMessage.setVisible(true);
+//            lblErrMessage.setText("User Name is required!");
+//        } else if (password.isEmpty()) {
+//            lblErrMessage.setVisible(true);
+//            lblErrMessage.setText("Password is required!");
+//        } else {
+//            if (account == null) {
+//                account = new Account();
+//            }
+//            this.account.setUserName(userName);
+//            this.account.setPassword(password);
+//            this.account.setStatus(status);
+//            this.account.setUserRole(userRole);
+//            this.account.setAccountStatus(accountStatus);
 
             if (isEditAccount) {
                 editAccount();
             } else {
-                saveAccount();
+                //saveAccount();
+                accountHandler.saveAccount(account, new SaveAccountListener<FRAccountModel>() {
+                    @Override
+                    public void onSaveSuccess(FRAccountModel accountModel) {
+                        accountStage.close();
+                        listener.onSaveSuccess(accountModel);
+                    }
+
+                    @Override
+                    public void onSaveFail(String errMessage) {
+                        lblErrMessage.setVisible(true);
+                        lblErrMessage.setText(errMessage);
+                    }
+                });
             }
-        }
+
     }
 
     public void saveAccount() {

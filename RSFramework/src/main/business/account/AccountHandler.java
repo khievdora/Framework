@@ -27,7 +27,12 @@ public abstract class AccountHandler {
         if (!validateInvalidFields(account, listener)) {
             return;
         }
-        this.dbFacade.saveFRAccountModel(account);
+        int result = this.dbFacade.saveFRAccountModel(account);
+        if (result == 0) {
+            listener.onSaveFail("Account cannot be saved into database");
+        } else {
+            listener.onSaveSuccess(account);
+        }
     }
 
     public abstract boolean validateRequiredFields(FRAccountModel account, SaveAccountListener listener);
