@@ -1,5 +1,6 @@
 package main.business.reservation;
 
+import main.db.DBFacade;
 import main.db.IDatabase;
 import main.model.FRReservationModel;
 
@@ -9,9 +10,9 @@ import java.util.List;
  * Created by Gize on 4/25/2017.
  */
 public abstract class Reservation {
-    protected IReservation iReservation;
+    protected DBFacade iReservation;
 
-    public Reservation(IReservation iReservation) {
+    public Reservation(DBFacade iReservation) {
         this.iReservation = iReservation;
     }
 
@@ -24,9 +25,9 @@ public abstract class Reservation {
     public int checkIn(FRReservationModel reservationModel) {
         int result = 0;
         if (iReservation.getReservatinById(reservationModel.getCode()) != null) {
-            result = this.iReservation.updateReservation(reservationModel);
+            result = this.iReservation.updateFRReservationModel(reservationModel);
         } else {
-            result = this.iReservation.saveReservation(reservationModel);
+            result = this.iReservation.saveFRReservationModel(reservationModel);
         }
         return result;
     }
@@ -35,21 +36,21 @@ public abstract class Reservation {
         if (!validateReservation(rModel)) {
             return 0;
         }
-        return this.iReservation.saveReservation(rModel);
+        return this.iReservation.saveFRReservationModel(rModel);
     }
 
     public int updateReservation(FRReservationModel rModel) {
         if (!validateReservation(rModel)) {
             return 0;
         }
-        return this.iReservation.updateReservation(rModel);
+        return this.iReservation.updateFRReservationModel(rModel);
     }
 
     public int deleteReservation(FRReservationModel rModel) {
         if (!validateReservation(rModel)) {
             return 0;
         }
-        return this.iReservation.deleteReservationById(rModel.getCode());
+        return this.iReservation.deleteFRReservationModelById(rModel.getCode());
     }
 
     protected abstract boolean validateReservation(FRReservationModel rModel);
