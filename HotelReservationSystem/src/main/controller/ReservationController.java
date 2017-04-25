@@ -73,8 +73,10 @@ public class ReservationController implements Initializable {
         dpCheckIn.setValue(LocalDate.parse(res.getCheckInDate().toString()));
         dpBooked.setValue(LocalDate.parse(res.getBookedDate().toString()));
         dpCheckOut.setValue(LocalDate.parse(res.getCheckOut().toString()));
-        comboRoom.setValue(res.getRoom().getRoomNumber());
-        comboGuest.setValue(res.getGuest().getfName());
+        if (res.getRoom() != null)
+            comboRoom.setValue(res.getRoom().getRoomNumber());
+        if (res.getGuest() != null)
+            comboGuest.setValue(res.getGuest().getfName());
         comboStatus.setValue(res.getRegistrationStatus());
 
     }
@@ -152,10 +154,10 @@ public class ReservationController implements Initializable {
         String status = (comboStatus.getValue().toString());
         Reservation resObj = new Reservation(1, checkIN, checkOut, booked, guest, room, status);
 
-        ReservationBusiness reservationBusiness= new ReservationBusiness(status,this);
+        ReservationBusiness reservationBusiness = new ReservationBusiness(status, this);
         if (!isEditWindow) {
             reservationBusiness.reserve(resObj);
-           // save(resObj);
+            // save(resObj);
         } else {
             Edit(resObj);
         }
@@ -195,16 +197,16 @@ public class ReservationController implements Initializable {
         this.reserveStage.close();
     }
 
-    public void makeValidation(Reservation resObj) {
-        if (!resObj.getCheckInDate().equals(Date.valueOf(LocalDate.now()))){
+    public boolean makeValidation(Reservation resObj) {
+        if (!resObj.getCheckInDate().equals(Date.valueOf(LocalDate.now()))) {
             JOptionPane.showMessageDialog(null, "To check In, Check Date should be the same as today's date!");
-            return;
+            return false;
         }
-        if (resObj.getRoom()==null){
+        if (resObj.getRoom() == null) {
             JOptionPane.showMessageDialog(null, "To check in a guest you must select a room!");
-            return;
+            return false;
         }
-
+return true;
     }
 
     public void provideQuarantee() {

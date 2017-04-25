@@ -119,7 +119,7 @@ public class ReservationTapController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         code = new TableColumn("Id");
-        room = new TableColumn("FRProductModel");
+        room = new TableColumn("Room");
         guest = new TableColumn("Guest");
         checkInDate = new TableColumn("CheckIn Date");
         bookedDate = new TableColumn("Booked Date");
@@ -246,7 +246,7 @@ public class ReservationTapController implements Initializable {
                     Boolean isUpdated = new ReservationSubSystemOperations().editReservation(person);
 
                     if (isUpdated) {
-                        JOptionPane.showMessageDialog(null, "FRReservationModel cancelled successfully.");
+                        JOptionPane.showMessageDialog(null, "Reservation cancelled successfully.");
                     } else {
                         JOptionPane.showMessageDialog(null, "There is an error in cancelling this reservation!");
                     }
