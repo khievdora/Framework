@@ -14,6 +14,7 @@ import main.accountsub.AccountFacade;
 import main.accountsub.AccountService;
 import main.business.account.AccountHandler;
 import main.business.account.AccountHandlerImpl;
+import main.business.account.listener.DeleteListener;
 import main.db.DBFacade;
 import main.dbsub.DBFacadeImpl;
 import main.model.FRAccountModel;
@@ -156,7 +157,7 @@ public class AccountTapController implements Initializable, AccountController.Ac
         FRAccountModel accountToEdit = (FRAccountModel) tblAccount.getSelectionModel().getSelectedItem();
         if (accountToEdit != null) {
             AccountController accountController = (AccountController) new WindowNavigation().navigateToWindow("Add New FRAccountModel",
-                    "../../resource/view/FRAccountModel.fxml");
+                    "../../resource/view/Account.fxml");
             accountController.setAccountControllerListener(this);
             accountController.setAccount(accountToEdit);
         } else {
@@ -166,12 +167,24 @@ public class AccountTapController implements Initializable, AccountController.Ac
 
     public void onBtnAccountDeleteClicked(){
         FRAccountModel deletedAccount = (FRAccountModel) tblAccount.getSelectionModel().getSelectedItem();
-        int result = this.accountService.deleteAccount(deletedAccount);
-        if (result != 0) {
-            originalAccountList.remove(deletedAccount);
-        }
+//        int result = this.accountService.deleteAccount(deletedAccount);
+//        if (result != 0) {
+//            originalAccountList.remove(deletedAccount);
+//        }
         //onBtnAccountRefreshClicked();
-        refreshAccountTableView();
+//        refreshAccountTableView();
+        accountHandler.deleteAccount(deletedAccount, new DeleteListener<FRAccountModel>() {
+            @Override
+            public void onDeleteSuccess(FRAccountModel object) {
+                originalAccountList.remove(object);
+                refreshAccountTableView();
+            }
+
+            @Override
+            public void onDeleteFail(String errMessage) {
+                JOptionPane.showMessageDialog(null, errMessage);
+            }
+        });
     }
 
     public void refreshAccountTableView() {
