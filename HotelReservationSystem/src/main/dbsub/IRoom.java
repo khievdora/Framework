@@ -1,6 +1,6 @@
 package main.dbsub;
 
-import main.model.Room;
+import main.model.FRProductModel;
 
 import java.util.List;
 
@@ -9,11 +9,11 @@ import java.util.List;
  */
 public interface IRoom {
 
-    public int saveRoom(Room room);
-    public int updateRoom(Room room);
-    public int deleteRoom(Room room);
+    public int saveRoom(FRProductModel room);
+    public int updateRoom(FRProductModel room);
+    public int deleteRoom(FRProductModel room);
     public int deleteRoomById(int roomId);
-    public Room getRoomById(int roomId);
-    public List<Room> getAllRoom();
+    public FRProductModel getRoomById(int roomId);
+    public List<FRProductModel> getAllRoom();
 
 }

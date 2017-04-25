@@ -10,7 +10,7 @@ import javafx.stage.Stage;
 import main.ReservationSub.command.ReservationSubSystemOperations;
 import main.ReservationSub.payment.CashPayment;
 import main.ReservationSub.payment.PaymentBusiness;
-import main.model.Reservation;
+import main.model.FRReservationModel;
 
 import javax.swing.*;
 import java.net.URL;
@@ -31,7 +31,7 @@ public class Payment implements Initializable {
     @FXML
     private TextField txtCheckOut;
 
-    private Reservation reservation;
+    private FRReservationModel reservation;
                                   Stage stage;
     @Override
 
@@ -41,7 +41,7 @@ public class Payment implements Initializable {
         comboStatusList();
     }
 
-    public void setReservation(Reservation reservation,Stage st) {
+    public void setReservation(FRReservationModel reservation,Stage st) {
         this.reservation = reservation;
         txtGuest.setText(reservation.getGuest().getlName());
         txtRoom.setText(reservation.getRoom().getRoomName());

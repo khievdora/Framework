@@ -1,6 +1,7 @@
 package main.dbsub;
 
 import main.model.Address;
+import main.model.FRAddressModel;
 
 import java.sql.ResultSet;
 import java.util.ArrayList;
@@ -18,7 +19,7 @@ public class AddressImpl implements IAddress {
     }
 
     @Override
-    public int saveAddress(Address address) {
+    public int saveAddress(FRAddressModel address) {
         int addressId = 0;
         try {
             String sql = "INSERT INTO address (zip, street, city, state, country) VALUES (" +
@@ -41,7 +42,7 @@ public class AddressImpl implements IAddress {
     }
 
     @Override
-    public int updateAddress(Address address) {
+    public int updateAddress(FRAddressModel address) {
         int result = 0;
         try {
             String sql = "UPDATE address SET " +
@@ -59,7 +60,7 @@ public class AddressImpl implements IAddress {
     }
 
     @Override
-    public int deleteAddress(Address address) {
+    public int deleteAddress(FRAddressModel address) {
         int result = 0;
         try {
             String sql = "DELETE FROM address WHERE idAddress = " + address.getCode();
@@ -85,7 +86,7 @@ public class AddressImpl implements IAddress {
     }
 
     @Override
-    public Address getAddressById(int addressId) {
+    public FRAddressModel getAddressById(int addressId) {
         Address address = null;
         try {
             String sql = "SELECT * FROM address WHERE idAddress = " + addressId + " LIMIT 1";
@@ -109,8 +110,8 @@ public class AddressImpl implements IAddress {
     }
 
     @Override
-    public List<Address> getAllAddress() {
-        List<Address> addressList = new ArrayList<>();
+    public List<FRAddressModel> getAllAddress() {
+        List<FRAddressModel> addressList = new ArrayList<>();
 
         try {
             String sql = "SELECT * FROM address";

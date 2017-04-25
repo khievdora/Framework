@@ -2,21 +2,15 @@ package main.controller;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.*;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-import main.ReservationSub.command.ReservationSubSystemOperations;
-import main.dbsub.DBFacade;
+import main.dbsub.DBFacadeImpl;
 import main.dbsub.DBService;
 import main.model.Address;
-import main.model.Reservation;
-import main.model.Room;
-import main.model.RoomType;
 
 import javax.swing.*;
 import java.awt.*;
 import java.net.URL;
-import java.sql.Date;
 import java.util.ResourceBundle;
 
 /**
@@ -58,7 +52,7 @@ public class Guest implements Initializable {
     }
 
     public Guest() {
-        this.dbService = new DBFacade();
+        this.dbService = new DBFacadeImpl();
     }
 
     @Override

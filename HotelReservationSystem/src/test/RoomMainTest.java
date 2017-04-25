@@ -3,7 +3,7 @@ package test;
 import main.dbsub.IRoom;
 import main.dbsub.RoomImpl;
 import main.dbsub.RoomTypeImpl;
-import main.model.Room;
+import main.model.FRProductModel;
 
 import java.util.List;
 
@@ -18,7 +18,7 @@ public class RoomMainTest {
         IRoom iRoom = new RoomImpl();
 
         // Display all Rooms
-        List<Room> roomList = iRoom.getAllRoom();
+        List<FRProductModel> roomList = iRoom.getAllRoom();
         //main.displayAllRooms(roomList);
 
         // Add New RoomController
@@ -52,7 +52,7 @@ public class RoomMainTest {
 
     }
 
-    public void displayAllRooms(List<Room> roomList) {
+    public void displayAllRooms(List<FRProductModel> roomList) {
         roomList.forEach(System.out::println);
     }
 

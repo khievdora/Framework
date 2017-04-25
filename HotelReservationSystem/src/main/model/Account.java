@@ -8,7 +8,7 @@ import javafx.beans.property.StringProperty;
 /**
  * Created by Gize on 4/19/2017.
  */
-public class Account {
+public class Account implements FRAccountModel{
     private  IntegerProperty code;
     private  StringProperty userName;
     private  StringProperty password;

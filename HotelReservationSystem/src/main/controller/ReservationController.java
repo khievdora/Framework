@@ -1,7 +1,5 @@
 package main.controller;
 
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -11,7 +9,7 @@ import javafx.scene.control.DatePicker;
 import javafx.stage.Stage;
 import main.ReservationSub.ReservationBusiness;
 import main.ReservationSub.command.ReservationSubSystemOperations;
-import main.dbsub.DBFacade;
+import main.dbsub.DBFacadeImpl;
 import main.dbsub.DBService;
 import main.dbsub.GuestImpl;
 import main.dbsub.RoomImpl;
@@ -44,7 +42,7 @@ public class ReservationController implements Initializable {
     @FXML
     private DatePicker dpBooked;
     private DBService dbService;
-    private main.model.Reservation editedReservation;
+    private FRReservationModel editedReservation;
     private boolean isEditWindow = false;
     Stage reserveStage;
 
@@ -53,7 +51,7 @@ public class ReservationController implements Initializable {
     }
 
     public ReservationController() {
-        this.dbService = new DBFacade();
+        this.dbService = new DBFacadeImpl();
     }
 
     @Override
@@ -66,11 +64,11 @@ public class ReservationController implements Initializable {
         dpCheckOut.setValue(LocalDate.now());
     }
 
-    List<Room> allRooms = null;
-    List<main.model.Guest> allGuests = null;
+    List<FRProductModel> allRooms = null;
+    List<FRCustomerModel> allGuests = null;
 
     //
-    public void setEditedReservation(main.model.Reservation res) {
+    public void setEditedReservation(FRReservationModel res) {
         this.editedReservation = res;
         dpCheckIn.setValue(LocalDate.parse(res.getCheckInDate().toString()));
         dpBooked.setValue(LocalDate.parse(res.getBookedDate().toString()));
@@ -92,7 +90,7 @@ public class ReservationController implements Initializable {
 
     public void comboRoomlist() {
 
-        List<Room> guests = new RoomImpl().getAllRoom();
+        List<FRProductModel> guests = new RoomImpl().getAllRoom();
         allRooms = new ArrayList<>();
         allRooms = guests;
         List<Integer> rooms = guests.stream().map(rm -> rm.getRoomNumber()).collect(Collectors.toList());
@@ -111,7 +109,7 @@ public class ReservationController implements Initializable {
     public void comboGuestlist() {
 
 
-        List<main.model.Guest> guests = new GuestImpl().getAllGuest();
+        List<FRCustomerModel> guests = new GuestImpl().getAllGuest();
         allGuests = guests;
         List<String> roomNums = guests.stream().map(rm -> rm.getfName()).collect(Collectors.toList());
 
@@ -146,8 +144,8 @@ public class ReservationController implements Initializable {
             JOptionPane.showMessageDialog(null, "Please select room!");
             return;
         }
-        main.model.Guest guest = this.dbService.getAllGuest().stream().filter(g -> g.getfName().equals(comboGuest.getValue())).findAny().get();
-        Room room = this.dbService.getAllRoom().stream().filter(r -> r.getRoomNumber() == Integer.parseInt(comboRoom.getValue().toString())).findAny().get();
+        FRCustomerModel guest = this.dbService.getAllGuest().stream().filter(g -> g.getfName().equals(comboGuest.getValue())).findAny().get();
+        FRProductModel room = this.dbService.getAllRoom().stream().filter(r -> r.getRoomNumber() == Integer.parseInt(comboRoom.getValue().toString())).findAny().get();
         Date checkIN = Date.valueOf(dpCheckIn.getValue());
         Date booked = Date.valueOf(dpBooked.getValue());
         Date checkOut = Date.valueOf(dpCheckOut.getValue());

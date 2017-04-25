@@ -5,7 +5,7 @@ import javafx.beans.property.*;
 /**
  * Created by Gize on 4/19/2017.
  */
-public class Room {
+public class Room implements FRProductModel{
     private  IntegerProperty code;
     private  StringProperty roomName;
     private  IntegerProperty roomNumber;
@@ -13,13 +13,13 @@ public class Room {
     private  StringProperty roomStatus;
     private  IntegerProperty floor;
     private  StringProperty description;
-    private  ObjectProperty<RoomType> roomType;
+    private  ObjectProperty<FRProductTypeModel> roomType;
     private  IntegerProperty maxQuest;
     private  StringProperty status;
     private  FloatProperty price;
 
     public Room(int code, String roomName, Integer roomNumber, String roomStatus, Integer floor, String description,
-                RoomType roomType, Integer maxQuest, String status, float price) {
+                FRProductTypeModel roomType, Integer maxQuest, String status, float price) {
         this.code = new SimpleIntegerProperty(code);
         this.roomName = new SimpleStringProperty(roomName);
         this.roomNumber = new SimpleIntegerProperty(roomNumber);
@@ -108,15 +108,15 @@ public class Room {
         this.description.set(description);
     }
 
-    public RoomType getRoomType() {
+    public FRProductTypeModel getRoomType() {
         return roomType.get();
     }
 
-    public ObjectProperty<RoomType> roomTypeProperty() {
+    public ObjectProperty<FRProductTypeModel> roomTypeProperty() {
         return roomType;
     }
 
-    public void setRoomType(RoomType roomType) {
+    public void setRoomType(FRProductTypeModel roomType) {
         this.roomType.set(roomType);
     }
 

@@ -1,7 +1,7 @@
 package main.ReservationSub.command;
 
 import main.dbsub.ReservationImpl;
-import main.model.Reservation;
+import main.model.FRReservationModel;
 
 import java.util.Stack;
 
@@ -12,7 +12,7 @@ public class ReservationSubSystemOperations {
     private ReservationCommands currentCommand = null;
     private Stack<ReservationCommands> executedCommands = new Stack<>();
 
-    public boolean addReservation(Reservation res) {
+    public boolean addReservation(FRReservationModel res) {
         currentCommand = new SaveReservationCommand(res);
         if (currentCommand.executeReservationCommands()) {
             executedCommands.push(currentCommand);
@@ -21,7 +21,7 @@ public class ReservationSubSystemOperations {
         return false;
     }
 
-    public boolean deleteReservationById(Reservation res) {
+    public boolean deleteReservationById(FRReservationModel res) {
         currentCommand = new DeleteReservationCommand(res);
         if (currentCommand.executeReservationCommands()) {
             executedCommands.push(currentCommand);
@@ -30,7 +30,7 @@ public class ReservationSubSystemOperations {
         return false;
     }
 
-    public boolean editReservation(Reservation res) {
+    public boolean editReservation(FRReservationModel res) {
         currentCommand = new EditReservationCommand(res);
         if (currentCommand.executeReservationCommands()) {
             executedCommands.push(currentCommand);

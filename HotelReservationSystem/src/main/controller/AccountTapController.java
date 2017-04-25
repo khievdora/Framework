@@ -3,7 +3,6 @@ package main.controller;
 import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -13,13 +12,15 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import main.Shared.WindowNavigation;
 import main.accountsub.AccountFacade;
 import main.accountsub.AccountService;
-import main.model.Account;
+import main.business.account.AccountHandler;
+import main.business.account.AccountHandlerImpl;
+import main.db.DBFacade;
+import main.dbsub.DBFacadeImpl;
+import main.model.FRAccountModel;
 
 import javax.swing.*;
-import java.awt.*;
 import java.net.URL;
 import java.util.ResourceBundle;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 /**
@@ -42,46 +43,51 @@ public class AccountTapController implements Initializable, AccountController.Ac
     @FXML
     private TableView tblAccount;
     @FXML
-    private TableColumn<Account, Void> num;
+    private TableColumn<FRAccountModel, Void> num;
     @FXML
-    private TableColumn<Account, Integer> idAccount;
+    private TableColumn<FRAccountModel, Integer> idAccount;
     @FXML
-    private TableColumn<Account, String> userName;
+    private TableColumn<FRAccountModel, String> userName;
     @FXML
-    private TableColumn<Account, String> password;
+    private TableColumn<FRAccountModel, String> password;
     @FXML
-    private TableColumn<Account, String> status;
+    private TableColumn<FRAccountModel, String> status;
     @FXML
-    private TableColumn<Account, String> userRole;
+    private TableColumn<FRAccountModel, String> userRole;
     @FXML
-    private TableColumn<Account, String> accountStatus;
+    private TableColumn<FRAccountModel, String> accountStatus;
 
 
     private AccountService accountService;
-    private ObservableList<Account> originalAccountList = FXCollections.observableArrayList();
-    private ObservableList<Account> modifiedAccountList = FXCollections.observableArrayList();
+    private DBFacade dbFacade;
+    private AccountHandler accountHandler;
+    private ObservableList<FRAccountModel> originalAccountList = FXCollections.observableArrayList();
+    private ObservableList<FRAccountModel> modifiedAccountList = FXCollections.observableArrayList();
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         // Initialize Database service
         this.accountService = new AccountFacade();
+        dbFacade = new DBFacadeImpl();
+        accountHandler = new AccountHandlerImpl(dbFacade);
 
-        // Load Account list from Database
-        originalAccountList = FXCollections.observableArrayList(this.accountService.getAllAccount());
+        // Load FRAccountModel list from Database
+        //originalAccountList = FXCollections.observableArrayList(this.accountService.getAllAccount());
+        originalAccountList = FXCollections.observableArrayList(this.accountHandler.getAllAccount());
 
-        // Load Account list into TableView;
+        // Load FRAccountModel list into TableView;
         loadAccountListIntoTableView();
     }
 
     @Override
-    public void onSaveSuccess(Account account) {
+    public void onSaveSuccess(FRAccountModel account) {
         originalAccountList.add(account);
         //onBtnAccountRefreshClicked();
         refreshAccountTableView();
     }
 
     @Override
-    public void onUpdateSuccess(Account account) {
+    public void onUpdateSuccess(FRAccountModel account) {
         //onBtnAccountRefreshClicked();
         refreshAccountTableView();
     }
@@ -99,10 +105,10 @@ public class AccountTapController implements Initializable, AccountController.Ac
         password.setVisible(false);
         status = new TableColumn<>("Status");
         userRole = new TableColumn<>("User Role");
-        accountStatus = new TableColumn<>("Account Status");
+        accountStatus = new TableColumn<>("FRAccountModel Status");
 
         num.setCellFactory(col -> {
-            TableCell<Account, Void> cell = new TableCell<>();
+            TableCell<FRAccountModel, Void> cell = new TableCell<>();
             cell.textProperty().bind(Bindings.createStringBinding(() -> {
                 if (cell.isEmpty()) {
                     return null;
@@ -136,7 +142,7 @@ public class AccountTapController implements Initializable, AccountController.Ac
     }
 
     public void onBtnAccountAddClicked(){
-        AccountController accountController = (AccountController) new WindowNavigation().navigateToWindow("Add New Account",
+        AccountController accountController = (AccountController) new WindowNavigation().navigateToWindow("Add New FRAccountModel",
                 "../../resource/view/Account.fxml");
         accountController.setAccountControllerListener(this);
     }
@@ -147,10 +153,10 @@ public class AccountTapController implements Initializable, AccountController.Ac
     }
 
     public void onBtnAccountEditClicked(){
-        Account accountToEdit = (Account) tblAccount.getSelectionModel().getSelectedItem();
+        FRAccountModel accountToEdit = (FRAccountModel) tblAccount.getSelectionModel().getSelectedItem();
         if (accountToEdit != null) {
-            AccountController accountController = (AccountController) new WindowNavigation().navigateToWindow("Add New Account",
-                    "../../resource/view/Account.fxml");
+            AccountController accountController = (AccountController) new WindowNavigation().navigateToWindow("Add New FRAccountModel",
+                    "../../resource/view/FRAccountModel.fxml");
             accountController.setAccountControllerListener(this);
             accountController.setAccount(accountToEdit);
         } else {
@@ -159,7 +165,7 @@ public class AccountTapController implements Initializable, AccountController.Ac
     }
 
     public void onBtnAccountDeleteClicked(){
-        Account deletedAccount = (Account) tblAccount.getSelectionModel().getSelectedItem();
+        FRAccountModel deletedAccount = (FRAccountModel) tblAccount.getSelectionModel().getSelectedItem();
         int result = this.accountService.deleteAccount(deletedAccount);
         if (result != 0) {
             originalAccountList.remove(deletedAccount);

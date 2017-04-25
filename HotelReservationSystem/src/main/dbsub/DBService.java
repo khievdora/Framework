@@ -9,56 +9,56 @@ import java.util.List;
  */
 public interface DBService {
     // CRUD User
-    public int saveAccount(Account account);
-    public int updateAccount(Account account);
-    public int deleteAccount(Account account);
+    public int saveAccount(FRAccountModel account);
+    public int updateAccount(FRAccountModel account);
+    public int deleteAccount(FRAccountModel account);
     public int deleteAccountById(String accountId);
-    public Account getAccountById(String accountId);
-    public Account getAccountByUserName(String userName);
-    public Account getAccountByUserNameAndPassword(String userName, String password);
-    public List<Account> getAccountByFirstName(String firstName);
-    public List<Account> getAccountByLastName(String lastName);
-    public List<Account> getAllAccount();
+    public FRAccountModel getAccountById(String accountId);
+    public FRAccountModel getAccountByUserName(String userName);
+    public FRAccountModel getAccountByUserNameAndPassword(String userName, String password);
+    public List<FRAccountModel> getAccountByFirstName(String firstName);
+    public List<FRAccountModel> getAccountByLastName(String lastName);
+    public List<FRAccountModel> getAllAccount();
 
-    //CRUD Reservation
-    public int saveReservation(Reservation reservation);
-    public int updateReservation(Reservation reservation);
-    public List<Reservation> getAllReservation();
-    public Reservation getReservatinById(int idReservation);
+    //CRUD FRReservationModel
+    public int saveReservation(FRReservationModel reservation);
+    public int updateReservation(FRReservationModel reservation);
+    public List<FRReservationModel> getAllReservation();
+    public FRReservationModel getReservatinById(int idReservation);
     public int deleteAllReservation();
     public int deleteReservationById(int idReservation);
 
-    //CRUD Guest
-    public int saveGuest(Guest guest);
-    public int updateGuest(Guest guest);
+    //CRUD FRCustomerModel
+    public int saveGuest(FRCustomerModel guest);
+    public int updateGuest(FRCustomerModel guest);
     public int deleteGuestById(int guestId);
     public int deleteAllGuest();
-    public Guest getGuestById(int guestId);
-    public List<Guest> getAllGuest();
+    public FRCustomerModel getGuestById(int guestId);
+    public List<FRCustomerModel> getAllGuest();
 
-    // CRUD Room Type
-    public int saveRoomType(RoomType roomType);
-    public int updateRoomType(RoomType roomType);
-    public int deleteRoomType(RoomType roomType);
+    // CRUD FRProductModel Type
+    public int saveRoomType(FRProductTypeModel roomType);
+    public int updateRoomType(FRProductTypeModel roomType);
+    public int deleteRoomType(FRProductTypeModel roomType);
     public int deleteRoomTypeById(int roomTypeId);
-    public RoomType getRoomTypeById(int roomTypeId);
-    public List<RoomType> getAllRoomType();
+    public FRProductTypeModel getRoomTypeById(int roomTypeId);
+    public List<FRProductTypeModel> getAllRoomType();
 
-    // CRUD Room
-    public int saveRoom(Room room);
-    public int updateRoom(Room room);
-    public int deleteRoom(Room room);
+    // CRUD FRProductModel
+    public int saveRoom(FRProductModel room);
+    public int updateRoom(FRProductModel room);
+    public int deleteRoom(FRProductModel room);
     public int deleteRoomById(int roomId);
-    public Room getRoomById(int roomId);
-    public List<Room> getAllRoom();
+    public FRProductModel getRoomById(int roomId);
+    public List<FRProductModel> getAllRoom();
 
-    //CRUD Address
-    public int saveAddress(Address address);
-    public int updateAddress(Address address);
-    public int deleteAddress(Address address);
+    //CRUD FRAddressModel
+    public int saveAddress(FRAddressModel address);
+    public int updateAddress(FRAddressModel address);
+    public int deleteAddress(FRAddressModel address);
     public int deleteAddressById(int addressId);
-    public Address getAddressById(int addressId);
-    public List<Address> getAllAddress();
+    public FRAddressModel getAddressById(int addressId);
+    public List<FRAddressModel> getAllAddress();
 
 
 }

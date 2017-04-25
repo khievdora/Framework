@@ -13,7 +13,6 @@ public class AccountHandlerImpl extends AccountHandler {
 
     public AccountHandlerImpl(DBFacade dbFacade) {
         super(dbFacade);
-
     }
 
     @Override

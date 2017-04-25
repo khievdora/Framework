@@ -4,7 +4,6 @@ package main.controller;
  * Created by Gize on 4/20/2017.
  */
 
-import javafx.beans.property.IntegerProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -20,16 +19,12 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import main.ReservationSub.command.ReservationSubSystemOperations;
-import main.ReservationSub.payment.CreditPayment;
-import main.ReservationSub.payment.PaymentBusiness;
 import main.Shared.UrlLoader;
 import main.dbconnection.DataAccessFacade;
 import main.dbsub.GuestImpl;
-import main.dbsub.ReservationImpl;
 import main.dbsub.RoomImpl;
 import main.dbsub.*;
-import main.model.Reservation;
-import main.model.Room;
+import main.model.*;
 import main.model.Guest;
 
 
@@ -53,19 +48,19 @@ public class ReservationCtrl implements Initializable {
     private javafx.scene.control.TableView homeTableView;
 
     @FXML
-    private TableColumn<Reservation, String> code;
+    private TableColumn<FRReservationModel, String> code;
     @FXML
-    private TableColumn<Reservation, String> firstName;
+    private TableColumn<FRReservationModel, String> firstName;
     @FXML
-    private TableColumn<Reservation, String> lastName;
+    private TableColumn<FRReservationModel, String> lastName;
     @FXML
-    private TableColumn<Reservation, Date> checkInDate;
+    private TableColumn<FRReservationModel, Date> checkInDate;
     @FXML
-    private TableColumn<Reservation, Date> bookedDate;
+    private TableColumn<FRReservationModel, Date> bookedDate;
     @FXML
-    private TableColumn<Reservation, Date> checkOutDate;
+    private TableColumn<FRReservationModel, Date> checkOutDate;
     @FXML
-    private TableColumn<Reservation, String> status;
+    private TableColumn<FRReservationModel, String> status;
     @FXML
     private ComboBox comboGuest;
     @FXML
@@ -86,7 +81,7 @@ public class ReservationCtrl implements Initializable {
     private DBService dbService;
 
     public ReservationCtrl() {
-        this.dbService = new DBFacade();
+        this.dbService = new DBFacadeImpl();
     }
 
     public void initialize(ActionEvent actionEvent) {
@@ -94,33 +89,33 @@ public class ReservationCtrl implements Initializable {
 
     }
 
-    List<Reservation> regList = null;
+    List<FRReservationModel> regList = null;
 
-    private List<Reservation> parseReservationList() {
+    private List<FRReservationModel> parseReservationList() {
 
         regList = this.dbService.getAllReservation();
-        List<Reservation> modifiedList = new ArrayList<>();
+        List<FRReservationModel> modifiedList = new ArrayList<>();
 
-        for (Reservation reg : regList) {
+        for (FRReservationModel reg : regList) {
 
             int code = reg.getCode();
-            Room room = reg.getRoom();
-            Guest guest = reg.getGuest();
+            FRProductModel room = reg.getRoom();
+            Guest guest = (Guest)reg.getGuest();
             Date checkIn = reg.getCheckInDate();
             Date booked = reg.getBookedDate();
             Date checkOut = reg.getCheckOut();
             String status = reg.getRegistrationStatus();
-            Reservation acc = new Reservation(code, checkIn, booked, checkOut, guest, room, status);
+            FRReservationModel acc = new Reservation(code, checkIn, booked, checkOut, guest, room, status);
             modifiedList.add(acc);
         }
-        final ObservableList<Reservation> list = FXCollections.observableArrayList();
+        final ObservableList<FRReservationModel> list = FXCollections.observableArrayList();
         list.addAll(modifiedList);
         return list;
     }
 
     private String getRoom(String sql, String value) {
         DataAccessFacade facade = new DataAccessFacade();
-        final ObservableList<Reservation> obserList;
+        final ObservableList<FRReservationModel> obserList;
         facade.openConnection();
         List<String> rooms = new ArrayList<>();
         ResultSet result = facade.executeQuery(sql, value);
@@ -138,7 +133,7 @@ public class ReservationCtrl implements Initializable {
     }
 
     private String getGuest(String value) {
-        main.model.Guest guest = new GuestImpl().getGuestById(Integer.parseInt(value));
+        main.model.Guest guest = (Guest) new GuestImpl().getGuestById(Integer.parseInt(value));
         if (guest != null) {
             return guest.getfName();
         } else {
@@ -149,7 +144,7 @@ public class ReservationCtrl implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         code = new TableColumn("Id");
-        firstName = new TableColumn("Room");
+        firstName = new TableColumn("FRProductModel");
         lastName = new TableColumn("Guest");
         checkInDate = new TableColumn("CheckIn Date");
         bookedDate = new TableColumn("Booked Date");
@@ -185,12 +180,12 @@ public class ReservationCtrl implements Initializable {
         homeTableView.setItems((ObservableList) parseReservationList());
     }
 
-    List<Room> allRooms = null;
-    List<Guest> allGuests = null;
+    List<FRProductModel> allRooms = null;
+    List<FRCustomerModel> allGuests = null;
 
     public void comboRoomlist() {
 
-        List<Room> guests = new RoomImpl().getAllRoom();
+        List<FRProductModel> guests = new RoomImpl().getAllRoom();
         allRooms = new ArrayList<>();
         allRooms = guests;
         List<Integer> rooms = guests.stream().map(rm -> rm.getRoomNumber()).collect(Collectors.toList());
@@ -209,7 +204,7 @@ public class ReservationCtrl implements Initializable {
     public void comboGuestlist() {
 
 
-        List<Guest> guests = new GuestImpl().getAllGuest();
+        List<FRCustomerModel> guests = new GuestImpl().getAllGuest();
         allGuests = guests;
         List<String> roomNums = guests.stream().map(rm -> rm.getfName()).collect(Collectors.toList());
 
@@ -248,18 +243,18 @@ public class ReservationCtrl implements Initializable {
 
         String code = txtCode.getText().trim();
 
-        Guest guest = this.dbService.getGuestById(1);
-        Room room = this.dbService.getRoomById(1);
+        FRCustomerModel guest = this.dbService.getGuestById(1);
+        FRProductModel room = this.dbService.getRoomById(1);
         Date checkIN = Date.valueOf(dpCheckIn.getValue());
         Date booked = Date.valueOf(dpCheckIn.getValue());
         Date checkOut = Date.valueOf(dpCheckIn.getValue());
         String status = (comboStatus.getValue().toString());
-        Reservation resObj = new Reservation(Integer.parseInt(code), checkIN, checkOut, booked, guest, room, status);
+        FRReservationModel resObj = new Reservation(Integer.parseInt(code), checkIN, checkOut, booked, guest, room, status);
         save(resObj);
 
     }
 
-    public void save(Reservation res) {
+    public void save(FRReservationModel res) {
         try {
             ReservationSubSystemOperations impl = new ReservationSubSystemOperations();
             boolean isSaved = impl.addReservation(res);
@@ -284,7 +279,7 @@ public class ReservationCtrl implements Initializable {
     }
 
     public void checkOut() {
-        Reservation person = (Reservation) homeTableView.getSelectionModel().getSelectedItem();
+        FRReservationModel person = (FRReservationModel) homeTableView.getSelectionModel().getSelectedItem();
         if (person != null) {
             if (person.getRegistrationStatus().equals("CHECKIN")) {
                 Payment payment = new Payment();
@@ -315,20 +310,20 @@ public class ReservationCtrl implements Initializable {
     }
 
     public void cancelReservation() {
-        Reservation person = (Reservation) homeTableView.getSelectionModel().getSelectedItem();
+        FRReservationModel person = (FRReservationModel) homeTableView.getSelectionModel().getSelectedItem();
         if (person != null) {
             if (person.getRegistrationStatus() != "CANCELLED") {
                // Guest gu = person.getGuest();
-               // Room rm = person.getRoom();
+               // FRProductModel rm = person.getRoom();
                // person.setGuest((Guest) allGuests.stream().filter(r -> r.getfName().equals(gu.getfName())));
-              //  person.setRoom((Room) allRooms.stream().filter(r -> r.getRoomNumber() == rm.getRoomNumber()));
+              //  person.setRoom((FRProductModel) allRooms.stream().filter(r -> r.getRoomNumber() == rm.getRoomNumber()));
                 person.setRegistrationStatus("CANCELLED");
                 //update the registration here
                 try {
                     Boolean isUpdated = new ReservationSubSystemOperations().editReservation(person);
 
                     if (isUpdated) {
-                        JOptionPane.showMessageDialog(null, "Reservation cancelled successfully.");
+                        JOptionPane.showMessageDialog(null, "FRReservationModel cancelled successfully.");
                     } else {
                         JOptionPane.showMessageDialog(null, "There is an error in cancelling this reservation!");
                     }
@@ -345,7 +340,7 @@ public class ReservationCtrl implements Initializable {
     }
 
     public void deleteReservation() {
-        Reservation reservation = (Reservation) homeTableView.getSelectionModel().getSelectedItem();
+        FRReservationModel reservation = (FRReservationModel) homeTableView.getSelectionModel().getSelectedItem();
         if (reservation != null) {
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setTitle("Delete Confirmation");

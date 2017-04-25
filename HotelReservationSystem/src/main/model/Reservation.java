@@ -7,13 +7,13 @@ import java.sql.Date;
 /**
  * Created by Gize on 4/19/2017.
  */
-public class Reservation {
+public class Reservation implements FRReservationModel {
     private IntegerProperty code;
     private Date checkInDate;
     private Date checkOut;
     private Date bookedDate;
-    private ObjectProperty<Guest> guest;
-    private ObjectProperty<Room> room;
+    private ObjectProperty<FRCustomerModel> guest;
+    private ObjectProperty<FRProductModel> room;
     private StringProperty registrationStatus;
 
     public Reservation() {
@@ -23,7 +23,7 @@ public class Reservation {
         this.registrationStatus = new SimpleStringProperty();
     }
 
-    public Reservation(int code, Date checkInDate, Date bookedDate, Date checkOutDate, Guest guest, Room room,
+    public Reservation(int code, Date checkInDate, Date bookedDate, Date checkOutDate, FRCustomerModel guest, FRProductModel room,
                        String registrationStatus) {
         this.code = new SimpleIntegerProperty(code);
         this.checkInDate = checkInDate;
@@ -70,11 +70,16 @@ public class Reservation {
         this.bookedDate = bookedDate;
     }
 
-    public Guest getGuest() {
+    public FRCustomerModel getGuest() {
         return guest.get();
     }
 
-    public ObjectProperty<Guest> guestProperty() {
+    @Override
+    public void setGuest(FRCustomerModel FRCustomerModel) {
+        this.guest.set(FRCustomerModel);
+    }
+
+    public ObjectProperty<FRCustomerModel> guestProperty() {
         return guest;
     }
 
@@ -82,15 +87,15 @@ public class Reservation {
         this.guest.set(guest);
     }
 
-    public Room getRoom() {
+    public FRProductModel getRoom() {
         return room.get();
     }
 
-    public ObjectProperty<Room> roomProperty() {
+    public ObjectProperty<FRProductModel> roomProperty() {
         return room;
     }
 
-    public void setRoom(Room room) {
+    public void setRoom(FRProductModel room) {
         this.room.set(room);
     }
 

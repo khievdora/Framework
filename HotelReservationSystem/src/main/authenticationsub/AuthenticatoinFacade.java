@@ -2,7 +2,7 @@ package main.authenticationsub;
 
 import main.authenticationsub.proxy.AuthenticationProxy;
 import main.authenticationsub.proxy.IAuthentication;
-import main.model.Account;
+import main.model.FRAccountModel;
 import main.accountsub.AccountFacade;
 import main.accountsub.AccountService;
 
@@ -25,8 +25,8 @@ public class AuthenticatoinFacade implements AuthenticationService {
 
     @Override
     public void login(String userName, String password) throws NullPointerException {
-        Account account = this.authenticationProxy.requestLogin(userName, password);
-        System.out.println("Account = " + account.toString());
+        FRAccountModel account = this.authenticationProxy.requestLogin(userName, password);
+        System.out.println("FRAccountModel = " + account.toString());
         if (this.authenticationSubcriber == null) {
             throw new NullPointerException("There is no authentication subscriber in this form");
         } else {
