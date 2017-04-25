@@ -13,8 +13,7 @@ import main.accountsub.AccountFacade;
 import main.accountsub.AccountService;
 import main.business.account.AccountHandler;
 import main.business.account.AccountHandlerImpl;
-import main.business.account.listener.SaveAccountListener;
-import main.db.DBFacade;
+import main.business.account.listener.SaveListener;
 import main.dbsub.DBFacadeImpl;
 import main.model.Account;
 import main.model.FRAccountModel;
@@ -118,65 +117,38 @@ public class AccountController implements Initializable, IController {
         this.account.setUserRole(userRole);
         this.account.setAccountStatus(accountStatus);
 
+        if (isEditAccount) {
+            //editAccount();
+            accountHandler.updateAccount(account, new SaveListener<FRAccountModel>() {
+                @Override
+                public void onSaveSuccess(FRAccountModel object) {
+                    accountStage.close();
+                    listener.onUpdateSuccess(object);
+                }
 
-//        if (userName.isEmpty()) {
-//            lblErrMessage.setVisible(true);
-//            lblErrMessage.setText("User Name is required!");
-//        } else if (password.isEmpty()) {
-//            lblErrMessage.setVisible(true);
-//            lblErrMessage.setText("Password is required!");
-//        } else {
-//            if (account == null) {
-//                account = new Account();
-//            }
-//            this.account.setUserName(userName);
-//            this.account.setPassword(password);
-//            this.account.setStatus(status);
-//            this.account.setUserRole(userRole);
-//            this.account.setAccountStatus(accountStatus);
-
-            if (isEditAccount) {
-                editAccount();
-            } else {
-                //saveAccount();
-                accountHandler.saveAccount(account, new SaveAccountListener<FRAccountModel>() {
-                    @Override
-                    public void onSaveSuccess(FRAccountModel accountModel) {
-                        accountStage.close();
-                        listener.onSaveSuccess(accountModel);
-                    }
-
-                    @Override
-                    public void onSaveFail(String errMessage) {
-                        lblErrMessage.setVisible(true);
-                        lblErrMessage.setText(errMessage);
-                    }
-                });
-            }
-
-    }
-
-    public void saveAccount() {
-        int result = this.accountService.saveAccount(this.account);
-        this.accountStage.close();
-        if (result != 0) {
-            this.listener.onSaveSuccess(this.account);
+                @Override
+                public void onSaveFail(String errMessage) {
+                    lblErrMessage.setVisible(true);
+                    lblErrMessage.setText(errMessage);
+                }
+            });
         } else {
-            this.listener.onSaveFail("Save fail!");
-        }
-    }
+            //saveAccount();
+            accountHandler.saveAccount(account, new SaveListener<FRAccountModel>() {
+                @Override
+                public void onSaveSuccess(FRAccountModel accountModel) {
+                    accountStage.close();
+                    listener.onSaveSuccess(accountModel);
+                }
 
-    public void editAccount() {
-        System.out.println("Update FRAccountModel");
-        System.out.println("FRAccountModel " + this.account.toString());
-        int result = this.accountService.updateAccount(this.account);
-        System.out.println("Result = " + result);
-        this.accountStage.close();
-        if (result != 0) {
-            this.listener.onUpdateSuccess(this.account);
-        } else {
-            this.listener.onSaveFail("Save fail!");
+                @Override
+                public void onSaveFail(String errMessage) {
+                    lblErrMessage.setVisible(true);
+                    lblErrMessage.setText(errMessage);
+                }
+            });
         }
+
     }
 
     public void loadDataIntoComboBox() {

@@ -1,6 +1,6 @@
 package main.business.account;
 
-import main.business.account.listener.SaveAccountListener;
+import main.business.account.listener.SaveListener;
 import main.db.DBFacade;
 import main.model.FRAccountModel;
 
@@ -21,7 +21,11 @@ public class AccountHandlerImpl extends AccountHandler {
     }
 
     @Override
-    public boolean validateRequiredFields(FRAccountModel account, SaveAccountListener listener) {
+    public boolean validateRequiredFields(FRAccountModel account, SaveListener listener) {
+        if (account == null) {
+            listener.onSaveFail("There is no record to do the operation!");
+            return false;
+        }
         if (account.getUserName().isEmpty()) {
             listener.onSaveFail("User name is required!");
             return false;
@@ -35,7 +39,7 @@ public class AccountHandlerImpl extends AccountHandler {
     }
 
     @Override
-    public boolean validateInvalidFields(FRAccountModel account, SaveAccountListener listener) {
+    public boolean validateInvalidFields(FRAccountModel account, SaveListener listener) {
         if (account.getPassword().length() < 5) {
             listener.onSaveFail("Password must be at least 5 characters!");
             return false;
