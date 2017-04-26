@@ -1,1 +1,4 @@
 .idea/workspace.xml
+out/
+out/production/RSFramework/main/business/product/Product.class
+out/production/RSFramework/main/business/product/ProductType.class
