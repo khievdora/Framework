@@ -19,6 +19,11 @@ import main.LoginWindow;
 import main.authenticationsub.AuthenticationService;
 import main.authenticationsub.AuthenticationSubcriber;
 import main.authenticationsub.AuthenticatoinFacade;
+import main.business.authentication.AuthenticationHandler;
+import main.business.authentication.AuthenticationHandlerImpl;
+import main.business.authentication.listener.AuthenticationListener;
+import main.db.DBFacade;
+import main.dbsub.DBFacadeImpl;
 import main.model.FRAccountModel;
 
 import java.io.InputStream;
@@ -44,10 +49,15 @@ public class LoginController implements Initializable, AuthenticationSubcriber {
     private AuthenticationService authService;
     private LoginWindow loginWindow;
 
+    private DBFacade dbFacade;
+    private AuthenticationHandler authenticationHandler;
+
     public LoginController() {
         //System.out.println("LoginController is instantiated!!!");
         authService = new AuthenticatoinFacade();
-        authService.registerAuthenticationSubscriber(this);
+        //authService.registerAuthenticationSubscriber(this);
+        dbFacade = new DBFacadeImpl();
+        authenticationHandler = new AuthenticationHandlerImpl(dbFacade);
     }
 
     @Override
@@ -101,8 +111,21 @@ public class LoginController implements Initializable, AuthenticationSubcriber {
 
     public void onButtonLoginClicked() {
         System.out.println("Button login clicked!!!");
-        authService.login(txtUserName.getText(), txtPassword.getText());
+//        authService.login(txtUserName.getText(), txtPassword.getText());
 //        this.loginWindow.navigateToMainWindow();
+        authenticationHandler.login(txtUserName.getText(), txtPassword.getText(), new AuthenticationListener() {
+            @Override
+            public void onLoginSuccess(FRAccountModel accountModel) {
+                loginWindow.navigateToMainWindow();
+            }
+
+            @Override
+            public void onLoginFail(String errMessage) {
+                txtUserName.requestFocus();
+                lblMessage.setText(errMessage);
+                clearText();
+            }
+        });
     }
 
     public void onButtonCancelClicked() {

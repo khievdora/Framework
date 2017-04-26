@@ -106,7 +106,7 @@ public class AccountTapController implements Initializable, AccountController.Ac
         password.setVisible(false);
         status = new TableColumn<>("Status");
         userRole = new TableColumn<>("User Role");
-        accountStatus = new TableColumn<>("FRAccountModel Status");
+        accountStatus = new TableColumn<>("Account Status");
 
         num.setCellFactory(col -> {
             TableCell<FRAccountModel, Void> cell = new TableCell<>();
