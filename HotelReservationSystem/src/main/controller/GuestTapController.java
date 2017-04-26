@@ -66,7 +66,7 @@ public class GuestTapController implements Initializable {
 
     public void onBtnGuestAddClicked() {
         try {
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("../../resource/view/FRCustomerModel.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("../../resource/view/Guest.fxml"));
             Parent root1 = (Parent) fxmlLoader.load();
             main.controller.Guest guCtrl = (main.controller.Guest) fxmlLoader.<FRCustomerModel>getController();
             Stage stage = new Stage();
@@ -86,7 +86,7 @@ public class GuestTapController implements Initializable {
 
 
         try {
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("../../resource/view/FRCustomerModel.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("../../resource/view/Guest.fxml"));
             Parent root1 = (Parent) fxmlLoader.load();
             Stage stage = new Stage();
             main.controller.Guest guCtrl = (main.controller.Guest) fxmlLoader.<FRCustomerModel>getController();

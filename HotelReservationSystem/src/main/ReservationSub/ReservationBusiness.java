@@ -32,9 +32,9 @@ public class ReservationBusiness {
 
     }
 
-    public void validate(Reservation obj) {
+    public boolean validate(Reservation obj) {
         //TODO: call controller method that validates
-        this.reservationTapController.makeValidation(obj);
+       return this.reservationTapController.makeValidation(obj);
 
     }
 
