@@ -50,6 +50,7 @@ public abstract class AccountHandler {
             return;
         }
         int result = this.dbFacade.updateFRAccountModel(account);
+        System.out.println("Account has been edited");
         if (result == 0) {
             listener.onSaveFail("Account cannot be updated into database!");
         } else {

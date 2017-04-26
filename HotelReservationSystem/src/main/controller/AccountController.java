@@ -9,11 +9,11 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-import main.accountsub.AccountFacade;
-import main.accountsub.AccountService;
 import main.business.account.AccountHandler;
 import main.business.account.AccountHandlerImpl;
 import main.business.account.listener.SaveListener;
+import main.accountsub.memento.AccountCareTaker;
+import main.accountsub.memento.AccountMemento;
 import main.dbsub.DBFacadeImpl;
 import main.model.Account;
 import main.model.FRAccountModel;
@@ -62,6 +62,7 @@ public class AccountController implements Initializable, IController {
     private AccountControllerListener listener;
 
     private AccountHandler accountHandler;
+    private AccountCareTaker accountCareTaker;
     private Stage accountStage;
     private boolean isEditAccount = false;
     private FRAccountModel account;
@@ -73,6 +74,8 @@ public class AccountController implements Initializable, IController {
         // this object will handle database operation and validation during
         // saving, updating and delete account for you.
         accountHandler = new AccountHandlerImpl(new DBFacadeImpl());
+
+        accountCareTaker = new AccountCareTaker();
 
         // Load data into ComboBox
         loadDataIntoComboBox();
@@ -115,6 +118,10 @@ public class AccountController implements Initializable, IController {
         if (account == null) {
             account = new Account();
         }
+
+        // Save account to state by using Memento Pattern
+        accountCareTaker.add(new AccountMemento(account));
+
         this.account.setUserName(userName);
         this.account.setPassword(password);
         this.account.setStatus(status);
@@ -134,6 +141,9 @@ public class AccountController implements Initializable, IController {
                 public void onSaveFail(String errMessage) {
                     lblErrMessage.setVisible(true);
                     lblErrMessage.setText(errMessage);
+
+                    // In case save account fail, we have to restore account back to its previous state
+                    accountCareTaker.restoreToPreviousState(account);
                 }
             });
         } else {
@@ -149,6 +159,9 @@ public class AccountController implements Initializable, IController {
                 public void onSaveFail(String errMessage) {
                     lblErrMessage.setVisible(true);
                     lblErrMessage.setText(errMessage);
+
+                    // In case save account fail, we have to restore account back to its previous state
+                    accountCareTaker.restoreToPreviousState(account);
                 }
             });
         }

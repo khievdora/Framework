@@ -1,10 +1,7 @@
 package main.business.reservation;
 
 import main.db.DBFacade;
-import main.db.IDatabase;
 import main.model.FRReservationModel;
-
-import java.util.List;
 
 /**
  * Created by Gize on 4/25/2017.
