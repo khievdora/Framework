@@ -58,22 +58,16 @@ public class AccountTapController implements Initializable, AccountController.Ac
     @FXML
     private TableColumn<FRAccountModel, String> accountStatus;
 
-
-    private AccountService accountService;
-    private DBFacade dbFacade;
     private AccountHandler accountHandler;
     private ObservableList<FRAccountModel> originalAccountList = FXCollections.observableArrayList();
     private ObservableList<FRAccountModel> modifiedAccountList = FXCollections.observableArrayList();
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        // Initialize Database service
-        this.accountService = new AccountFacade();
-        dbFacade = new DBFacadeImpl();
-        accountHandler = new AccountHandlerImpl(dbFacade);
+
+        accountHandler = new AccountHandlerImpl(new DBFacadeImpl());
 
         // Load FRAccountModel list from Database
-        //originalAccountList = FXCollections.observableArrayList(this.accountService.getAllAccount());
         originalAccountList = FXCollections.observableArrayList(this.accountHandler.getAllAccount());
 
         // Load FRAccountModel list into TableView;
@@ -83,13 +77,11 @@ public class AccountTapController implements Initializable, AccountController.Ac
     @Override
     public void onSaveSuccess(FRAccountModel account) {
         originalAccountList.add(account);
-        //onBtnAccountRefreshClicked();
         refreshAccountTableView();
     }
 
     @Override
     public void onUpdateSuccess(FRAccountModel account) {
-        //onBtnAccountRefreshClicked();
         refreshAccountTableView();
     }
 
@@ -149,7 +141,6 @@ public class AccountTapController implements Initializable, AccountController.Ac
     }
 
     public void onBtnAccountRefreshClicked(){
-        //tblAccount.setItems(originalAccountList);
         refreshAccountTableView();
     }
 

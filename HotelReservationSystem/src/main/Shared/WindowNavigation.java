@@ -39,5 +39,5 @@ public class WindowNavigation {
         }
 
         return controller;
-    };
+    }
 }

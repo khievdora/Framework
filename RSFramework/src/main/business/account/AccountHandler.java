@@ -9,6 +9,9 @@ import java.util.List;
 
 /**
  * Created by Dora on 4/24/2017.
+ *
+ * AccountHandler is an Abstract class in Template Method pattern
+ * It has hooks methods such as saveAccount, updateAccount, deleteAccount
  */
 public abstract class AccountHandler {
 
@@ -67,14 +70,7 @@ public abstract class AccountHandler {
     }
 
     public abstract List<FRAccountModel> getAllAccount();
-    public abstract boolean validateRequiredFields(FRAccountModel account, SaveListener listener);
-    public abstract boolean validateInvalidFields(FRAccountModel account, SaveListener listener);
-
-//    public int deleteAccountById(String accountId);
-//    public FRAccountModel getAccountById(String accountId);
-//    public FRAccountModel getAccountByUserName(String userName);
-//    public FRAccountModel getAccountByUserNameAndPassword(String userName, String password);
-//    public List<FRAccountModel> getAccountByFirstName(String firstName);
-//    public List<FRAccountModel> getAccountByLastName(String lastName);
+    protected abstract boolean validateRequiredFields(FRAccountModel account, SaveListener listener);
+    protected abstract boolean validateInvalidFields(FRAccountModel account, SaveListener listener);
 
 }

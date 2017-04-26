@@ -61,7 +61,6 @@ public class AccountController implements Initializable, IController {
 
     private AccountControllerListener listener;
 
-    private AccountService accountService;
     private AccountHandler accountHandler;
     private Stage accountStage;
     private boolean isEditAccount = false;
@@ -70,9 +69,9 @@ public class AccountController implements Initializable, IController {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
-        // Initialize FRAccountModel Service
-        this.accountService = new AccountFacade();
-
+        // Initialize AccountHandler from Framework package
+        // this object will handle database operation and validation during
+        // saving, updating and delete account for you.
         accountHandler = new AccountHandlerImpl(new DBFacadeImpl());
 
         // Load data into ComboBox
@@ -87,6 +86,11 @@ public class AccountController implements Initializable, IController {
         this.accountStage = stage;
     }
 
+    /**
+     * This method will be called when we use registration form as Edit form
+     * This is what we call reusable component.
+     * @param account
+     */
     public void setAccount(FRAccountModel account) {
         this.account = account;
         this.isEditAccount = true;
