@@ -97,14 +97,6 @@ public class RoomRegistrationController implements Initializable, IController {
 
     public void onBtnRoomSaveClicked() {
         System.out.println("Button save clicked!!!");
-//        final Spinner<Integer> spinner = new Spinner<Integer>();
-//        final int initialValue = 3;
-//        SpinnerValueFactory<Integer> valueFactory =
-//                new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 5, initialValue);
-//        SpinnerValueFactory svf = new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 100);
-//
-//        spinner.setValueFactory(valueFactory);
-
         int code = Integer.parseInt(txtRoomCode.getText());
         String rName = txtRoomName.getText();
         int rNumber = Integer.parseInt(txtRoomNumber.getText());
@@ -186,7 +178,6 @@ public class RoomRegistrationController implements Initializable, IController {
 
         for (String id : rooms) {
             roomTypesData.add(id);
-            System.out.println("Id = "+id);
 
         }
         cbRoomRegistration.setItems(null);

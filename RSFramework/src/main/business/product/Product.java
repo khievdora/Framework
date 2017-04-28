@@ -1,21 +1,17 @@
 package main.business.product;
 
 import main.model.FRProductModel;
+import java.util.List;
 
 /**
- * Created by gebre on 4/25/2017.
+ * Created by Dora on 4/24/2017.
  */
 public abstract class Product {
-    public IProduct iProduct;
-
-    public Product(IProduct iProduct) {
-        this.iProduct = iProduct;
-    }
-    public int savaProduct(FRProductModel productModel){
-        if(!validateProduct(productModel)){
-            return 0;
-        }
-        return  this.iProduct.saveProduct(productModel);
-    }
-    public abstract boolean validateProduct(FRProductModel productModel);
+    public abstract int saveProduct(FRProductModel frProductModel);
+    public abstract int updateProduct(FRProductModel frProductModel);
+    public abstract int deleteProduct(FRProductModel frProductModel);
+    public abstract int deleteProductById(int productId);
+    public abstract FRProductModel getProductById(int productId);
+    public abstract List<FRProductModel> getAllProducts();
+    public abstract void test();
 }
