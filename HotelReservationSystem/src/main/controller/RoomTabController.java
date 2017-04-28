@@ -140,22 +140,9 @@ public class RoomTabController implements Initializable, RoomRegistrationControl
 
     }
     public void onBtnRoomAddClicked(){
-        System.out.println("Button save clicked!!");
         RoomRegistrationController roomTypeController = (RoomRegistrationController) new WindowNavigation().navigateToWindow("Add FRProductModel",
                 "../../resource/view/RoomRegistrationForm.fxml");
         roomTypeController.setRoomControllerListener(this);
-//        try {
-//            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("../../resource/view/RoomRegistrationForm.fxml"));
-//            Parent root1 = fxmlLoader.load();
-//            Stage stage = new Stage();
-//            RoomRegistrationController roomRegistrationController = fxmlLoader.getController();
-//            roomRegistrationController.setRoomControllerListener(this);
-//
-//            stage.setScene(new Scene(root1));
-//            stage.show();
-//        } catch(Exception e) {
-//            e.printStackTrace();
-//        }
 
     }
 

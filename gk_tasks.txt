@@ -1,0 +1,21 @@
+Application
+1. Main windwow UI designing
+   - Reservation tab
+   - Rooms tab
+   - Room Type tab
+   - Account tab
+   - Guest tab
+   - Room Registration form
+2. Login form UI designing and its controller implementation
+2. Room subsystem implementation 
+   - Both model and controller
+3. Database connection using singlton design pattern
+3. Database creating and query statement writing
+4. Account Controller implementation
+5. Login Authentication using proxy design pattern.
+6. In the room implementation I use Observer pattern 
+7. Use Case and class diagram preparation
+8. Generally how hotel reservation system works and designing
+
+Framework
+1. Room subsystem implementation
